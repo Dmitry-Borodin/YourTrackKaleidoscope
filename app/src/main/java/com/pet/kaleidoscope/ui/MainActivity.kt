@@ -1,7 +1,8 @@
-package com.pet.kaleidoscope
+package com.pet.kaleidoscope.ui
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import com.pet.kaleidoscope.R
 
 class MainActivity : AppCompatActivity() {
 
