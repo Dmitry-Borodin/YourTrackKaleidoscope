@@ -5,6 +5,6 @@ package com.pet.kaleidoscope.ui
  */
 interface MainView {
     fun setStateStopped()
-    fun setStateRUnning()
-    fun addElement()
+    fun setStateRunning()
+    fun showPictures(urls: List<String>)
 }

@@ -3,17 +3,19 @@ package com.pet.kaleidoscope.ui
 /**
  * @author Dmitry Borodin on 2/22/19.
  */
-class MainPresenter(val view: MainView) {
+class MainPresenter() {
 
-    fun start() {
+    var view: MainView? = null
 
+    fun start(view: MainView) {
+        this.view = view
     }
 
     fun stop() {
-
+        this.view = null
     }
 
-    fun fetchCurrentState() {
+    fun onStartStopBottonClicked() {
 
     }
 }

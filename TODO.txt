@@ -1,4 +1,8 @@
 - create action bar at the top - check shadow. Light theme for status bar
+- style link for text
+- updating pictures - don't touch what was not changed
+
+
 
 
 
