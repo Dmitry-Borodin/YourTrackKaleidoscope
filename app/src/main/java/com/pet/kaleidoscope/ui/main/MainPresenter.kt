@@ -1,5 +1,6 @@
 package com.pet.kaleidoscope.ui.main
 
+import com.pet.kaleidoscope.App
 import com.pet.kaleidoscope.data.FlickrProvider
 import com.pet.kaleidoscope.ui.base.ScopedPresenter
 import kotlinx.coroutines.*
@@ -9,7 +10,7 @@ import kotlinx.coroutines.*
  */
 class MainPresenter : ScopedPresenter() {
 
-    val flickrProvider = FlickrProvider
+    val flickrProvider = App.instance.flickrProvider
 
     var view: MainView? = null
 
@@ -21,9 +22,16 @@ class MainPresenter : ScopedPresenter() {
         this.view = null
     }
 
-    fun onStartStopBottonClicked() = launch(Dispatchers.Main) {
+    fun onStartStopButtonClicked() = launch(Dispatchers.Main) {
 
-        val isAuthenticated = flickrProvider.getPermissions()
+        //checkPermissions, if not - request it
+
+        val isAuthenticated = flickrProvider.hasReadPermissions() //?: view.showError no network?
+
+        if (isAuthenticated != true) {
+            view?.requestAuth()
+            return@launch
+        }
 
         val url = async(Dispatchers.IO) { flickrProvider.getFlickrPicUrl() }
         view?.showPictures(listOf(url.await()))

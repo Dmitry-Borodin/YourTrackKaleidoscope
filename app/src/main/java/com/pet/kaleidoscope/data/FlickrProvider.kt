@@ -7,6 +7,7 @@ import com.flickr4java.flickr.RequestContext
 import com.flickr4java.flickr.auth.Auth
 import com.flickr4java.flickr.auth.Permission
 import com.flickr4java.flickr.photos.GeoData
+import com.github.scribejava.core.model.OAuth1AccessToken
 import com.github.scribejava.core.model.OAuth1RequestToken
 import com.github.scribejava.core.model.Token
 import com.pet.kaleidoscope.Constants
@@ -17,12 +18,20 @@ import timber.log.Timber
 /**
  * @author Dmitry Borodin on 2/22/19.
  */
-object FlickrProvider {
+class FlickrProvider(val repository: Repository) {
     val flickr = Flickr(Constants.FLICKR_API.decode(), Constants.FLICKR_SECRET.decode(), REST())
 
     //TODO
     suspend fun hasReadPermissions(): Boolean? {
-        flickr.authInterface.checkToken()
+        val credentials = repository.oauthFlickrCredentials ?: return false
+        try {
+            val auth = flickr.authInterface.checkToken(credentials.token, credentials.verifier)
+            return auth.permission.type >= Permission.READ_TYPE
+        }catch (e : java.lang.Exception) {
+          e.printStackTrace()
+        }
+        return false
+
     }
 
     suspend fun getFlickrPicUrl(): String {
@@ -40,16 +49,16 @@ object FlickrProvider {
 
     suspend fun autoriseForFlickr(oauthToken: String, oauthVerifier: String) {
         try {
-            val accessToken: Token = flickr.authInterface.getAccessToken(oauthToken, oauthVerifier)
-            val requestToken: OAuth1RequestToken = flickr.authInterface.requestToken
+            val requestToken : OAuth1RequestToken = flickr.authInterface.requestToken
+            val permissionUrl = flickr.authInterface.getAuthorizationUrl(requestToken, Permission.READ)
+            val accessToken: Token = flickr.authInterface.getAccessToken(requestToken, oauthVerifier)
             val auth = Auth().apply {
-                token = requestToken.token
+                this.token = requestToken.token
                 tokenSecret = requestToken.tokenSecret
                 permission = Permission.WRITE
             }
             RequestContext.getRequestContext().auth = auth
             flickr.auth = auth;
-            auth = flickr.authInterface.checkToken(accessToken)
             // This token can be used until the user revokes it.
         } catch (e: FlickrException) {
             Timber.d(e)

@@ -2,12 +2,16 @@ package com.pet.kaleidoscope
 
 import android.app.Application
 import com.flickr4java.flickr.Flickr
+import com.pet.kaleidoscope.data.FlickrProvider
+import com.pet.kaleidoscope.data.PreferencesRepository
 import timber.log.Timber
 
 /**
  * @author Dmitry Borodin on 3/10/19.
  */
 class App : Application() {
+
+    val flickrProvider = FlickrProvider(PreferencesRepository())
 
     override fun onCreate() {
         super.onCreate()

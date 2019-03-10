@@ -2,4 +2,5 @@
     <string name="app_name">YourTrackKaleidoscope</string>
     <string name="common_start">Start</string>
     <string name="common_stop">Stop</string>
+    <string name="flickr_auth_title">Authorize</string>
 </resources>
