@@ -1,4 +1,4 @@
-package com.pet.kaleidoscope.ui
+package com.pet.kaleidoscope.ui.main
 
 import android.view.LayoutInflater
 import android.view.View

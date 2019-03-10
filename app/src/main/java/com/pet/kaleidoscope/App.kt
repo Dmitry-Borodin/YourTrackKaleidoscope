@@ -1,6 +1,7 @@
 package com.pet.kaleidoscope
 
 import android.app.Application
+import com.flickr4java.flickr.Flickr
 import timber.log.Timber
 
 /**
@@ -13,6 +14,7 @@ class App : Application() {
         instance = this
         if (BuildConfig.DEBUG) {
             Timber.plant(Timber.DebugTree())
+            Flickr.debugRequest = true
         }
     }
 

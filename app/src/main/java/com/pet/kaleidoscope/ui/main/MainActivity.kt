@@ -1,4 +1,4 @@
-package com.pet.kaleidoscope.ui
+package com.pet.kaleidoscope.ui.main
 
 import android.os.Bundle
 import android.widget.TextView
