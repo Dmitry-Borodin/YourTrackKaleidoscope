@@ -1,5 +1,8 @@
 package com.pet.kaleidoscope.ui
 
+import com.pet.kaleidoscope.data.TrackProvider
+import kotlinx.coroutines.*
+
 /**
  * @author Dmitry Borodin on 2/22/19.
  */
@@ -15,7 +18,8 @@ class MainPresenter() {
         this.view = null
     }
 
-    fun onStartStopBottonClicked() {
-
+    fun onStartStopBottonClicked() = GlobalScope.launch(Dispatchers.Main) {
+        val url = async(Dispatchers.IO) { TrackProvider.getFlickrPicUrl() }
+        view?.showPictures(listOf(url.await()))
     }
 }

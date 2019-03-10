@@ -3,8 +3,11 @@ package com.pet.kaleidoscope.ui
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
 import com.pet.kaleidoscope.R
+import com.squareup.picasso.Picasso
+import timber.log.Timber
 
 /**
  * @author Dmitry Borodin on 3/10/19.
@@ -32,6 +35,15 @@ class PicturesAdapter : RecyclerView.Adapter<PictureViewHolder>() {
 class PictureViewHolder(val view: View) : RecyclerView.ViewHolder(view) {
 
     fun bind(url: String) {
-        //TODO
+        if (url.isEmpty()) {
+            Timber.e("trying to bind empty string url to image view")
+            view.visibility = View.INVISIBLE
+        } else {
+            view.visibility = View.VISIBLE
+            Picasso.get()
+                .load(url)
+                .fit()
+                .into(view as ImageView)
+        }
     }
 }
