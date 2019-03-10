@@ -36,6 +36,7 @@ dependencies {
         exclude module: 'kotlin-stdlib'
     }
 
+    implementation 'com.jakewharton.timber:timber:4.7.1'
     implementation 'com.viewbinder:viewbinder:0.4.1'
     implementation 'com.flickr4java:flickr4java:3.0.1'
 
