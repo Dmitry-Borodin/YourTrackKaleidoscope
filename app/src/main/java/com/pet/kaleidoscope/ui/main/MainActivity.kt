@@ -1,6 +1,5 @@
 package com.pet.kaleidoscope.ui.main
 
-import android.app.Dialog
 import android.os.Bundle
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
@@ -23,14 +22,14 @@ class MainActivity : AppCompatActivity(), MainView {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         setSupportActionBar(findViewById(R.id.toolbar))
-        presenter.start(this)
+        presenter.onAttach(this)
         recycler.adapter = adapter
         recycler.layoutManager = LinearLayoutManager(this)
         startStopLink.setOnClickListener { presenter.onStartStopButtonClicked() }
     }
 
     override fun onDestroy() {
-        presenter.stop()
+        presenter.onDetouch()
         super.onDestroy()
     }
 

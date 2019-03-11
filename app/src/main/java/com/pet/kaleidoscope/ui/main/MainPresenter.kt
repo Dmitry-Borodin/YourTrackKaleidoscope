@@ -14,11 +14,13 @@ class MainPresenter : ScopedPresenter() {
 
     var view: MainView? = null
 
-    fun start(view: MainView) {
+    fun onAttach(view: MainView) {
+        super.onAttach()
         this.view = view
     }
 
-    fun stop() {
+    override fun onDetouch() {
+        super.onDetouch()
         this.view = null
     }
 
