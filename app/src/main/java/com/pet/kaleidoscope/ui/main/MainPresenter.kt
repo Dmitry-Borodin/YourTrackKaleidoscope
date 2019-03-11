@@ -10,7 +10,7 @@ import kotlinx.coroutines.*
  */
 class MainPresenter : ScopedPresenter() {
 
-    val flickrProvider = App.instance.flickrProvider
+    private val flickrProvider = App.instance.flickrProvider
 
     var view: MainView? = null
 

@@ -7,5 +7,7 @@ interface MainView {
     fun setStateStopped()
     fun setStateRunning()
     fun showPictures(urls: List<String>)
-    fun requestAuth()
+    fun requestAuth(url: String)
+    fun showLoading()
+    fun hideLoading()
 }

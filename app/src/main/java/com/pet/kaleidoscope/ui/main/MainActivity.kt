@@ -45,7 +45,7 @@ class MainActivity : AppCompatActivity(), MainView {
         adapter.items = urls.toMutableList()
     }
 
-    override fun requestAuth() {
+    override fun requestAuth(url: String) {
         val callback = object : FlickrAuthClientCallback {
             override fun onSuccessIntercepted(verifier: String, token: String) {
 //                presenter.
@@ -53,6 +53,6 @@ class MainActivity : AppCompatActivity(), MainView {
             }
 
         }
-        FlickrAuthDialog(this, callback).show()
+        FlickrAuthDialog(this, url, callback).show()
     }
 }
