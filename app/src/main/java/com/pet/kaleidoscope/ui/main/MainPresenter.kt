@@ -10,7 +10,8 @@ import kotlinx.coroutines.*
  */
 class MainPresenter : ScopedPresenter() {
 
-    private val flickrProvider = App.instance.flickrProvider
+    private val flickrProvider: FlickrProvider = App.instance.flickrProvider
+    private val flickrAuth = App.instance.flickrAuthenticator
 
     var view: MainView? = null
 
@@ -28,7 +29,7 @@ class MainPresenter : ScopedPresenter() {
 
         //checkPermissions, if not - request it
 
-        val isAuthenticated = flickrProvider.hasReadPermissions() //?: view.showError no network?
+        val isAuthenticated = flickrAuth.hasReadPermissions() //?: view.showError no network?
 
         if (isAuthenticated != true) {
             view?.requestAuth()

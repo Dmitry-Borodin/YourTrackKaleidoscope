@@ -2,6 +2,7 @@ package com.pet.kaleidoscope
 
 import android.app.Application
 import com.flickr4java.flickr.Flickr
+import com.pet.kaleidoscope.data.FlickrAuthenticator
 import com.pet.kaleidoscope.data.FlickrProvider
 import com.pet.kaleidoscope.data.PreferencesRepository
 import timber.log.Timber
@@ -12,6 +13,7 @@ import timber.log.Timber
 class App : Application() {
 
     val flickrProvider = FlickrProvider(PreferencesRepository())
+    val flickrAuthenticator = FlickrAuthenticator(PreferencesRepository())
 
     override fun onCreate() {
         super.onCreate()
