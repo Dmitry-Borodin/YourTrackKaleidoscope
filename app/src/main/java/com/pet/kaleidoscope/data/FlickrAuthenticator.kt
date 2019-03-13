@@ -18,7 +18,7 @@ import timber.log.Timber
 class FlickrAuthenticator(val repository: Repository) {
 
     //TODO inject as a dependency
-    val flickr = Flickr(Constants.FLICKR_API.decode(), Constants.FLICKR_SECRET.decode(), REST())
+    private val flickr = Flickr(Constants.FLICKR_API.decode(), Constants.FLICKR_SECRET.decode(), REST())
 
     //TODO
     suspend fun hasReadPermissions(): Boolean? {
@@ -30,14 +30,13 @@ class FlickrAuthenticator(val repository: Repository) {
             e.printStackTrace()
         }
         return false
-
     }
 
     /**
      * step 1 of 2 - get url to show webview, to grab verifier token from it
      */
-    suspend fun getAuthUrl() {
-
+    suspend fun getAuthUrl(): String {
+        return ""
     }
 
 

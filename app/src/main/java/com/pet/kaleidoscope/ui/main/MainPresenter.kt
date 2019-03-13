@@ -3,7 +3,9 @@ package com.pet.kaleidoscope.ui.main
 import com.pet.kaleidoscope.App
 import com.pet.kaleidoscope.data.FlickrProvider
 import com.pet.kaleidoscope.ui.base.ScopedPresenter
-import kotlinx.coroutines.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.launch
 
 /**
  * @author Dmitry Borodin on 2/22/19.
@@ -29,10 +31,11 @@ class MainPresenter : ScopedPresenter() {
 
         //checkPermissions, if not - request it
 
-        val isAuthenticated = flickrAuth.hasReadPermissions() //?: view.showError no network?
+        val isAuthenticated = true //= flickrAuth.hasReadPermissions() //?: view.showError no network?
 
         if (isAuthenticated != true) {
-            view?.requestAuth()
+            val url = async(Dispatchers.IO) { flickrAuth.getAuthUrl() }
+            view?.requestAuth(url.await())
             return@launch
         }
 

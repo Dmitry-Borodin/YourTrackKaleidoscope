@@ -8,6 +8,4 @@ interface MainView {
     fun setStateRunning()
     fun showPictures(urls: List<String>)
     fun requestAuth(url: String)
-    fun showLoading()
-    fun hideLoading()
 }

@@ -18,7 +18,16 @@ import timber.log.Timber
  * @author Dmitry Borodin on 2/22/19.
  */
 class FlickrProvider(val repository: Repository) {
-    val flickr = Flickr(Constants.FLICKR_API.decode(), Constants.FLICKR_SECRET.decode(), REST())
+    private val flickr = Flickr(Constants.FLICKR_API.decode(), Constants.FLICKR_SECRET.decode(), REST())
+
+    init {
+        val auth = Auth().apply {
+            this.token = Constants.OAUTH_TOKEN.decode()
+            tokenSecret = Constants.OAUTH_TOKEN_SECRET.decode()
+            permission = Permission.WRITE
+        }
+        RequestContext.getRequestContext().auth = auth
+    }
 
     suspend fun getFlickrPicUrl(): String {
         val geoData = GeoData("48.136553", "11.565598", Flickr.ACCURACY_REGION.toString())
