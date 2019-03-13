@@ -10,6 +10,7 @@ import com.github.scribejava.core.model.OAuth1RequestToken
 import com.github.scribejava.core.model.OAuth1Token
 import com.pet.kaleidoscope.Constants
 import com.pet.kaleidoscope.decode
+import kotlinx.coroutines.CoroutineScope
 import timber.log.Timber
 
 /**
@@ -19,6 +20,7 @@ class FlickrAuthenticator(val repository: Repository) {
 
     //TODO inject as a dependency
     private val flickr = Flickr(Constants.FLICKR_API.decode(), Constants.FLICKR_SECRET.decode(), REST())
+    private lateinit var requestToken: OAuth1RequestToken
 
     //TODO
     suspend fun hasReadPermissions(): Boolean? {
@@ -35,18 +37,17 @@ class FlickrAuthenticator(val repository: Repository) {
     /**
      * step 1 of 2 - get url to show webview, to grab verifier token from it
      */
-    suspend fun getAuthUrl(): String {
-        return ""
+    fun CoroutineScope.getAuthUrl(): String {
+        requestToken = flickr.authInterface.getRequestToken(null)
+        return flickr.authInterface.getAuthorizationUrl(requestToken, Permission.READ)
     }
 
 
     /**
      * step 2 of 2 - authorise based on verifier and save auth token
      */
-    suspend fun getAuthToken(oauthToken: String, oauthVerifier: String) {
+    fun CoroutineScope.getAuthToken(oauthToken: String, oauthVerifier: String) {
         try {
-            val requestToken: OAuth1RequestToken = flickr.authInterface.requestToken
-//            val permissionUrl = flickr.authInterface.getAuthorizationUrl(requestToken, Permission.READ) TODO
             val accessToken: OAuth1Token = flickr.authInterface.getAccessToken(requestToken, oauthVerifier)
             val auth = Auth().apply {
                 this.token = accessToken.token
@@ -59,10 +60,8 @@ class FlickrAuthenticator(val repository: Repository) {
             // This token can be used until the user revokes it.
         } catch (e: FlickrException) {
             Timber.d(e)
-            e.printStackTrace()
         } catch (e: Exception) {
             Timber.d(e)
-            e.printStackTrace()
         }
     }
 }
