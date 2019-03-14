@@ -7,17 +7,17 @@ import com.flickr4java.flickr.RequestContext
 import com.flickr4java.flickr.auth.Auth
 import com.flickr4java.flickr.auth.Permission
 import com.flickr4java.flickr.photos.GeoData
-import com.github.scribejava.core.model.OAuth1RequestToken
-import com.github.scribejava.core.model.OAuth1Token
 import com.pet.kaleidoscope.Constants
 import com.pet.kaleidoscope.decode
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import timber.log.Timber
 
 
 /**
  * @author Dmitry Borodin on 2/22/19.
  */
-class FlickrProvider(val repository: Repository) {
+class FlickrProvider(private val repository: Repository) {
     private val flickr = Flickr(Constants.FLICKR_API.decode(), Constants.FLICKR_SECRET.decode(), REST())
 
     init {
@@ -29,7 +29,7 @@ class FlickrProvider(val repository: Repository) {
         RequestContext.getRequestContext().auth = auth
     }
 
-    suspend fun getFlickrPicUrl(): String {
+    suspend fun getFlickrPicUrl(): String = withContext(Dispatchers.IO) {
         val geoData = GeoData("48.136553", "11.565598", Flickr.ACCURACY_REGION.toString())
 
         val flickrPhoto =
@@ -37,9 +37,9 @@ class FlickrProvider(val repository: Repository) {
                 flickr.photosInterface.geoInterface.photosForLocation(geoData, emptySet(), 0, 0).first()
             } catch (e: FlickrException) {
                 Timber.e(e)
-                return ""
+                return@withContext ""
             }
-        return flickrPhoto.medium640Url
+        return@withContext flickrPhoto.medium640Url
     }
 
 

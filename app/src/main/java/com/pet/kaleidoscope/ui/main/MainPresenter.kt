@@ -1,10 +1,10 @@
 package com.pet.kaleidoscope.ui.main
 
 import com.pet.kaleidoscope.App
+import com.pet.kaleidoscope.data.FlickrAuthenticator
 import com.pet.kaleidoscope.data.FlickrProvider
 import com.pet.kaleidoscope.ui.base.ScopedPresenter
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 
 /**
@@ -13,7 +13,7 @@ import kotlinx.coroutines.launch
 class MainPresenter : ScopedPresenter() {
 
     private val flickrProvider: FlickrProvider = App.instance.flickrProvider
-    private val flickrAuth = App.instance.flickrAuthenticator
+    private val flickrAuth: FlickrAuthenticator = App.instance.flickrAuthenticator
 
     var view: MainView? = null
 
@@ -30,20 +30,19 @@ class MainPresenter : ScopedPresenter() {
     fun onStartStopButtonClicked() = launch(Dispatchers.Main) {
 
         //checkPermissions, if not - request it
-
-        val isAuthenticated = true //= flickrAuth.hasReadPermissions() //?: view.showError no network?
+        val isAuthenticated = flickrAuth.hasReadPermissions() //?: view.showError no network?
 
         if (isAuthenticated != true) {
-            val url = async(Dispatchers.IO) { flickrAuth.getAuthUrl() }
-            view?.requestAuth(url.await())
+            val url = flickrAuth.getAuthUrl()
+            view?.requestAuth(url)
             return@launch
         }
 
-        val url = async(Dispatchers.IO) { flickrProvider.getFlickrPicUrl() }
-        view?.showPictures(listOf(url.await()))
+        val url = flickrProvider.getFlickrPicUrl()
+        view?.showPictures(listOf(url))
     }
 
-    fun onAuthRequestedSuccessfully() {
-
+    fun onAuthRequestedSuccessfully(verification: String) = launch(Dispatchers.Main) {
+        flickrAuth.getAuthToken(verification)
     }
 }

@@ -10,43 +10,44 @@ import com.github.scribejava.core.model.OAuth1RequestToken
 import com.github.scribejava.core.model.OAuth1Token
 import com.pet.kaleidoscope.Constants
 import com.pet.kaleidoscope.decode
-import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import timber.log.Timber
 
 /**
  * @author Dmitry Borodin on 3/13/19.
  */
-class FlickrAuthenticator(val repository: Repository) {
+class FlickrAuthenticator(private val repository: Repository) {
 
     //TODO inject as a dependency
     private val flickr = Flickr(Constants.FLICKR_API.decode(), Constants.FLICKR_SECRET.decode(), REST())
     private lateinit var requestToken: OAuth1RequestToken
 
     //TODO
-    suspend fun hasReadPermissions(): Boolean? {
-        val credentials = repository.oauthFlickrCredentials ?: return false
+    suspend fun hasReadPermissions(): Boolean? = withContext(Dispatchers.IO) {
+        val credentials = repository.oauthFlickrCredentials ?: return@withContext false
         try {
             val auth = flickr.authInterface.checkToken(credentials.token, credentials.tokenSecret)
-            return auth.permission.type >= Permission.READ_TYPE
+            return@withContext auth.permission.type >= Permission.READ_TYPE
         } catch (e: java.lang.Exception) {
             e.printStackTrace()
         }
-        return false
+        return@withContext false
     }
 
     /**
      * step 1 of 2 - get url to show webview, to grab verifier token from it
      */
-    fun CoroutineScope.getAuthUrl(): String {
+    suspend fun getAuthUrl(): String = withContext(Dispatchers.IO) {
         requestToken = flickr.authInterface.getRequestToken(null)
-        return flickr.authInterface.getAuthorizationUrl(requestToken, Permission.READ)
+        return@withContext flickr.authInterface.getAuthorizationUrl(requestToken, Permission.READ)
     }
 
 
     /**
      * step 2 of 2 - authorise based on verifier and save auth token
      */
-    fun CoroutineScope.getAuthToken(oauthToken: String, oauthVerifier: String) {
+    suspend fun getAuthToken(oauthVerifier: String) = withContext(Dispatchers.IO) {
         try {
             val accessToken: OAuth1Token = flickr.authInterface.getAccessToken(requestToken, oauthVerifier)
             val auth = Auth().apply {

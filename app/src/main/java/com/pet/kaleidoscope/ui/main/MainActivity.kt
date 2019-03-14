@@ -47,9 +47,8 @@ class MainActivity : AppCompatActivity(), MainView {
 
     override fun requestAuth(url: String) {
         val callback = object : FlickrAuthClientCallback {
-            override fun onSuccessIntercepted(verifier: String, token: String) {
-//                presenter.
-                TODO()
+            override fun onSuccessIntercepted(verifier: String) {
+                presenter.onAuthRequestedSuccessfully(verifier)
             }
 
         }
