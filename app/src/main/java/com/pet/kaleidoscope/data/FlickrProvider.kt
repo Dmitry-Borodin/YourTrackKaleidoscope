@@ -8,6 +8,7 @@ import com.flickr4java.flickr.auth.Auth
 import com.flickr4java.flickr.auth.Permission
 import com.flickr4java.flickr.photos.GeoData
 import com.pet.kaleidoscope.Constants
+import com.pet.kaleidoscope.data.storage.FlickrRepository
 import com.pet.kaleidoscope.decode
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -17,7 +18,7 @@ import timber.log.Timber
 /**
  * @author Dmitry Borodin on 2/22/19.
  */
-class FlickrProvider(private val repository: Repository) {
+class FlickrProvider(private val repository: FlickrRepository) {
     private val flickr = Flickr(Constants.FLICKR_API.decode(), Constants.FLICKR_SECRET.decode(), REST())
 
     init {

@@ -16,12 +16,8 @@ class FlickrAuthWebViewClient(val callback: FlickrAuthClientCallback) : WebViewC
         if (url?.contains("&oauth_verifier") == true) {
             val uri = Uri.parse(url)
             val oauthVerifier = uri.getQueryParameter("oauth_verifier")
-            val oauthToken = uri.getQueryParameter("oauth_token")
             requireNotNull(oauthVerifier) {
                 "oauthVerifier is null during proper url parsing for auth"
-            }
-            requireNotNull(oauthToken) {
-                "oauthToken is null during proper url parsing for auth"
             }
             callback.onSuccessIntercepted(oauthVerifier)
             //TODO cancel dialog?

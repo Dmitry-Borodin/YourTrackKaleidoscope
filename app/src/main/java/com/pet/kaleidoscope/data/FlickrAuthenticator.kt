@@ -9,6 +9,8 @@ import com.flickr4java.flickr.auth.Permission
 import com.github.scribejava.core.model.OAuth1RequestToken
 import com.github.scribejava.core.model.OAuth1Token
 import com.pet.kaleidoscope.Constants
+import com.pet.kaleidoscope.data.storage.FlickrOAuthData
+import com.pet.kaleidoscope.data.storage.FlickrRepository
 import com.pet.kaleidoscope.decode
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -17,7 +19,7 @@ import timber.log.Timber
 /**
  * @author Dmitry Borodin on 3/13/19.
  */
-class FlickrAuthenticator(private val repository: Repository) {
+class FlickrAuthenticator(private val repository: FlickrRepository) {
 
     //TODO inject as a dependency
     private val flickr = Flickr(Constants.FLICKR_API.decode(), Constants.FLICKR_SECRET.decode(), REST())
@@ -50,14 +52,17 @@ class FlickrAuthenticator(private val repository: Repository) {
     suspend fun getAuthToken(oauthVerifier: String) = withContext(Dispatchers.IO) {
         try {
             val accessToken: OAuth1Token = flickr.authInterface.getAccessToken(requestToken, oauthVerifier)
+
+            repository.oauthFlickrCredentials = FlickrOAuthData(accessToken.token, accessToken.tokenSecret)
             val auth = Auth().apply {
                 this.token = accessToken.token
                 tokenSecret = accessToken.tokenSecret
-                permission = Permission.WRITE
+                permission = Permission.READ
             }
             RequestContext.getRequestContext().auth = auth
             flickr.auth = auth
-            repository.oauthFlickrCredentials = FlickrOAuthData(accessToken.token, accessToken.tokenSecret)
+            repository.oauthFlickrCredentials =
+                FlickrOAuthData(accessToken.token, accessToken.tokenSecret)
             // This token can be used until the user revokes it.
         } catch (e: FlickrException) {
             Timber.d(e)

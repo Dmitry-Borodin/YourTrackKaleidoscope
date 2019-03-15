@@ -1,5 +1,7 @@
 package com.pet.kaleidoscope.ui.main
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
@@ -7,8 +9,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.pet.kaleidoscope.R
 import com.pet.kaleidoscope.ui.flickrauth.FlickrAuthClientCallback
-import com.pet.kaleidoscope.ui.flickrauth.FlickrAuthDialog
+import com.pet.kaleidoscope.ui.flickrauth.FlickrVerifierDialog
 import com.viewbinder.bindView
+
 
 class MainActivity : AppCompatActivity(), MainView {
 
@@ -50,8 +53,13 @@ class MainActivity : AppCompatActivity(), MainView {
             override fun onSuccessIntercepted(verifier: String) {
                 presenter.onAuthRequestedSuccessfully(verifier)
             }
-
         }
-        FlickrAuthDialog(this, url, callback).show()
+//        FlickrAuthWebViewDialog(this, url, callback).show()
+
+        FlickrVerifierDialog(this, callback).show()
+        val intent = Intent(Intent.ACTION_VIEW).also {
+            it.data = Uri.parse(url)
+        }
+        startActivity(intent)
     }
 }

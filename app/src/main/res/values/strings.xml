@@ -3,4 +3,6 @@
     <string name="common_start">Start</string>
     <string name="common_stop">Stop</string>
     <string name="flickr_auth_title">Authorize</string>
+    <string name="common_ok">OK</string>
+    <string name="please_enter_verification_code">Please enter verification code:</string>
 </resources>
