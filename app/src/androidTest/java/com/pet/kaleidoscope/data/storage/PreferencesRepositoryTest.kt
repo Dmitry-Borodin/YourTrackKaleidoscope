@@ -2,10 +2,8 @@ package com.pet.kaleidoscope.data.storage
 
 import androidx.test.runner.AndroidJUnit4
 import com.pet.kaleidoscope.App
-import com.pet.kaleidoscope.decode
-import com.pet.kaleidoscope.encode
 import org.junit.After
-import org.junit.Assert.*
+import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith

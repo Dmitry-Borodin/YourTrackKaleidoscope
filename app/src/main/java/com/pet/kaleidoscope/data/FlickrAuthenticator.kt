@@ -28,8 +28,10 @@ class FlickrAuthenticator(private val repository: FlickrRepository) {
     //TODO
     suspend fun hasReadPermissions(): Boolean? = withContext(Dispatchers.IO) {
         val credentials = repository.oauthFlickrCredentials ?: return@withContext false
+        Timber.d("loaded credentials, $credentials")
         try {
             val auth = flickr.authInterface.checkToken(credentials.token, credentials.tokenSecret)
+            Timber.d("permission loaded, have at least read = ${auth.permission.type >= Permission.READ_TYPE}")
             return@withContext auth.permission.type >= Permission.READ_TYPE
         } catch (e: java.lang.Exception) {
             e.printStackTrace()
@@ -61,8 +63,7 @@ class FlickrAuthenticator(private val repository: FlickrRepository) {
             }
             RequestContext.getRequestContext().auth = auth
             flickr.auth = auth
-            repository.oauthFlickrCredentials =
-                FlickrOAuthData(accessToken.token, accessToken.tokenSecret)
+            repository.oauthFlickrCredentials = FlickrOAuthData(accessToken.token, accessToken.tokenSecret)
             // This token can be used until the user revokes it.
         } catch (e: FlickrException) {
             Timber.d(e)

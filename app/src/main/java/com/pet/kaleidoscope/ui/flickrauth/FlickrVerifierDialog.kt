@@ -23,6 +23,7 @@ class FlickrVerifierDialog(context: Context, private val callback: FlickrAuthCli
         setTitle(context.getString(R.string.flickr_auth_title))
         okButton.setOnClickListener {
             callback.onSuccessIntercepted(editText.text.toString())
+            dismiss()
         }
     }
 }
