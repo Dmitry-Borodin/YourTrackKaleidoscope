@@ -31,23 +31,15 @@ class FlickrProvider(private val repository: FlickrRepository) {
         RequestContext.getRequestContext().auth = auth
     }
 
-    suspend fun getFlickrPicUrl(): String = withContext(Dispatchers.IO) {
+    suspend fun getFlickrPicUrl(): String? = withContext(Dispatchers.IO) {
         val geoData = GeoData("48.136553", "11.565598", Flickr.ACCURACY_REGION.toString())
-
-//        val flickrPhoto =
-//            try {
-//                flickr.photosInterface.geoInterface.photosForLocation(geoData, emptySet(), 0, 0).firstOrNull()
-//            } catch (e: FlickrException) {
-//                Timber.e(e)
-//                return@withContext ""
-//            }
 
         val searchParameters = SearchParameters().apply {
             latitude = geoData.latitude.toString()
             longitude = geoData.longitude.toString()
         }
-        val searchPhoto = flickr.photosInterface.search(searchParameters, 1,1).first()
-        return@withContext searchPhoto.medium640Url
+        val searchPhoto = flickr.photosInterface.search(searchParameters, 1,1).firstOrNull()
+        return@withContext searchPhoto?.medium640Url
     }
 
 
