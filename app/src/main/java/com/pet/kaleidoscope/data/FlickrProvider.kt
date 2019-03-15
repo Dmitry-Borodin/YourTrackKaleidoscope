@@ -7,6 +7,7 @@ import com.flickr4java.flickr.RequestContext
 import com.flickr4java.flickr.auth.Auth
 import com.flickr4java.flickr.auth.Permission
 import com.flickr4java.flickr.photos.GeoData
+import com.flickr4java.flickr.photos.SearchParameters
 import com.pet.kaleidoscope.Constants
 import com.pet.kaleidoscope.data.storage.FlickrRepository
 import com.pet.kaleidoscope.decode
@@ -33,14 +34,20 @@ class FlickrProvider(private val repository: FlickrRepository) {
     suspend fun getFlickrPicUrl(): String = withContext(Dispatchers.IO) {
         val geoData = GeoData("48.136553", "11.565598", Flickr.ACCURACY_REGION.toString())
 
-        val flickrPhoto =
-            try {
-                flickr.photosInterface.geoInterface.photosForLocation(geoData, emptySet(), 0, 0).first()
-            } catch (e: FlickrException) {
-                Timber.e(e)
-                return@withContext ""
-            }
-        return@withContext flickrPhoto.medium640Url
+//        val flickrPhoto =
+//            try {
+//                flickr.photosInterface.geoInterface.photosForLocation(geoData, emptySet(), 0, 0).firstOrNull()
+//            } catch (e: FlickrException) {
+//                Timber.e(e)
+//                return@withContext ""
+//            }
+
+        val searchParameters = SearchParameters().apply {
+            latitude = geoData.latitude.toString()
+            longitude = geoData.longitude.toString()
+        }
+        val searchPhoto = flickr.photosInterface.search(searchParameters, 1,1).first()
+        return@withContext searchPhoto.medium640Url
     }
 
 
