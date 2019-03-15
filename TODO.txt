@@ -2,7 +2,7 @@
 - style link for text
 - updating pictures - don't touch what was not changed
 - check whether I will add login for better results since it's ready anyway
-
+- remove minimap resources from the project
 
 
 

@@ -6,6 +6,6 @@ package com.pet.kaleidoscope.ui.main
 interface MainView {
     fun setStateStopped()
     fun setStateRunning()
-    fun showPictures(urls: List<String>)
+    fun showPictures(urls: List<String?>)
     fun requestAuth(url: String)
 }

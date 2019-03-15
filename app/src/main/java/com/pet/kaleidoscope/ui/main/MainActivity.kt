@@ -44,8 +44,8 @@ class MainActivity : AppCompatActivity(), MainView {
         startStopLink.text = getString(R.string.common_start)
     }
 
-    override fun showPictures(urls: List<String>) {
-        adapter.items = urls.toMutableList()
+    override fun showPictures(urls: List<String?>) {
+        adapter.items = urls.filterNotNull().toMutableList()
     }
 
     override fun requestAuth(url: String) {
