@@ -5,4 +5,7 @@
     <string name="flickr_auth_title">Authorize</string>
     <string name="common_ok">OK</string>
     <string name="please_enter_verification_code">Please enter verification code:</string>
+    <string name="notification_tracking_content">Tracking is active</string>
+    <string name="notification_channel_tracking_name">Tracking Service</string>
+    <string name="notification_channel_tracking_description">Required for reliability of tracking service</string>
 </resources>

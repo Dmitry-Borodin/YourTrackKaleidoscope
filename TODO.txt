@@ -4,6 +4,7 @@
 - check whether I will add login for better results since it's ready anyway
 - remove minimap resources from the project
 - add description why I need location permission
+- service implement START_STICKY - handle state
 
 
 
