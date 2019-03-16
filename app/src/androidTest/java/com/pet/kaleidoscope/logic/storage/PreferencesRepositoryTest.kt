@@ -7,6 +7,7 @@ import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.koin.test.KoinTest
+import org.koin.test.inject
 
 /**
  * @author Dmitry Borodin on 3/15/19.
@@ -14,7 +15,7 @@ import org.koin.test.KoinTest
 @RunWith(AndroidJUnit4::class)
 class PreferencesRepositoryTest : KoinTest {
 
-    private val repository: FlickrRepository = getKoin().get()
+    private val repository: FlickrRepository by inject()
 
     @Before
     fun setUp() {

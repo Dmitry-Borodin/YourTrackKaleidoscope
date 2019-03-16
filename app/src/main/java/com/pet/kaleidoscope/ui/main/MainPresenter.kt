@@ -43,6 +43,11 @@ class MainPresenter : ScopedPresenter() {
             return@launch
         }
 
+        val url = flickrProvider.getFlickrPicUrl()
+        view?.showPictures(listOf(url))
+    }
+
+    fun requestAuthintication() = launch(Dispatchers.Main) {
         //checkPermissions, if not - request it
         val isAuthenticated = flickrAuth.hasReadPermissions() //?: view.showError no network?
 
@@ -50,9 +55,6 @@ class MainPresenter : ScopedPresenter() {
             startAuthFlow()
             return@launch
         }
-
-        val url = flickrProvider.getFlickrPicUrl()
-        view?.showPictures(listOf(url))
     }
 
     private suspend fun startAuthFlow() {
