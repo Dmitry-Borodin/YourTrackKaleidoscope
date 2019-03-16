@@ -1,11 +1,8 @@
 package com.pet.kaleidoscope.logic
 
-import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
-import android.content.ServiceConnection
 import android.location.Location
-import android.os.IBinder
 import com.pet.kaleidoscope.service.LocationService
 import kotlinx.coroutines.channels.Channel
 
@@ -14,28 +11,30 @@ import kotlinx.coroutines.channels.Channel
  */
 class LocationProvider(private val appContext: Context) {
 
-    private val serviceConnection = object ::ServiceConnection() {
-        override fun onServiceConnected(className: android.content.ComponentName, service: android.os.IBinder) {
-            importService = (service as ApplicationMigrationService.ApplicationMigrationBinder).getService()
-            importService.setImportStateHandler(importStateHandler)
-
-            val state = importService.getState()
-            importStateHandler.obtainMessage(state.state, state.progress).sendToTarget()
-        }
-
-        override fun onServiceDisconnected(name: android.content.ComponentName) {
-            importService.setImportStateHandler(null)
-        }
-    }
 
     var isTrackingInProgress = false
     var resultChannel: Channel<Location> = Channel()
 
     fun startLocationTracking(): Channel<Location> {
-        appContext.bindService(Intent(appContext, LocationService.class), )
+        startForegroundService()
+        return resultChannel
     }
 
     fun stopLocationTracking() {
-        appContext.unbindService()
+        stopForegroundService()
+    }
+
+    private fun startForegroundService() {
+        val intent = Intent(appContext, LocationService::class.java).apply {
+            action = LocationService.START_TRACKING
+        }
+        appContext.startService(intent)
+    }
+
+    private fun stopForegroundService() {
+        val intent = Intent(appContext, LocationService::class.java).apply {
+            action = LocationService.STOP_TRACKING
+        }
+        appContext.startService(intent)
     }
 }
