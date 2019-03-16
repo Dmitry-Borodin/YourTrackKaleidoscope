@@ -1,8 +1,7 @@
 package com.pet.kaleidoscope.ui.main
 
-import com.pet.kaleidoscope.App
-import com.pet.kaleidoscope.data.FlickrAuthenticator
-import com.pet.kaleidoscope.data.FlickrProvider
+import com.pet.kaleidoscope.logic.FlickrAuthenticator
+import com.pet.kaleidoscope.logic.FlickrProvider
 import com.pet.kaleidoscope.ui.base.ScopedPresenter
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

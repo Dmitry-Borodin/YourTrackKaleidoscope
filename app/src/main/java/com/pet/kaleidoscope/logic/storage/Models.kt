@@ -1,4 +1,4 @@
-package com.pet.kaleidoscope.data.storage
+package com.pet.kaleidoscope.logic.storage
 
 /**
  * @author Dmitry Borodin on 3/10/19.

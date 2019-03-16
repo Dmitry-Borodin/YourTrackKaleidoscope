@@ -1,4 +1,4 @@
-package com.pet.kaleidoscope.data.storage
+package com.pet.kaleidoscope.logic.storage
 
 import android.content.Context
 

@@ -1,7 +1,6 @@
-package com.pet.kaleidoscope.data
+package com.pet.kaleidoscope.logic
 
 import com.flickr4java.flickr.Flickr
-import com.flickr4java.flickr.FlickrException
 import com.flickr4java.flickr.REST
 import com.flickr4java.flickr.RequestContext
 import com.flickr4java.flickr.auth.Auth
@@ -9,11 +8,10 @@ import com.flickr4java.flickr.auth.Permission
 import com.flickr4java.flickr.photos.GeoData
 import com.flickr4java.flickr.photos.SearchParameters
 import com.pet.kaleidoscope.Constants
-import com.pet.kaleidoscope.data.storage.FlickrRepository
+import com.pet.kaleidoscope.logic.storage.FlickrRepository
 import com.pet.kaleidoscope.decode
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import timber.log.Timber
 
 
 /**

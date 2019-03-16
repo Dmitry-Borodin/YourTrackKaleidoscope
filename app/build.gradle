@@ -38,6 +38,7 @@ dependencies {
         exclude module: 'kotlin-stdlib'
     }
 
+    implementation 'com.markodevcic.peko:peko:1.0.0'
     implementation "org.koin:koin-core:$koin_version"
     implementation "org.koin:koin-android:$koin_version"
     implementation "org.koin:koin-androidx-scope:$koin_version"

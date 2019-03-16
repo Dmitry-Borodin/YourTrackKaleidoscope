@@ -2,9 +2,6 @@ package com.pet.kaleidoscope
 
 import android.app.Application
 import com.flickr4java.flickr.Flickr
-import com.pet.kaleidoscope.data.FlickrAuthenticator
-import com.pet.kaleidoscope.data.FlickrProvider
-import com.pet.kaleidoscope.data.storage.FlickrRepositoryImpl
 import com.pet.kaleidoscope.di.appModule
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger

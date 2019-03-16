@@ -1,9 +1,9 @@
 package com.pet.kaleidoscope.di
 
-import com.pet.kaleidoscope.data.FlickrAuthenticator
-import com.pet.kaleidoscope.data.FlickrProvider
-import com.pet.kaleidoscope.data.storage.FlickrRepository
-import com.pet.kaleidoscope.data.storage.FlickrRepositoryImpl
+import com.pet.kaleidoscope.logic.FlickrAuthenticator
+import com.pet.kaleidoscope.logic.FlickrProvider
+import com.pet.kaleidoscope.logic.storage.FlickrRepository
+import com.pet.kaleidoscope.logic.storage.FlickrRepositoryImpl
 import org.koin.dsl.module
 
 /**

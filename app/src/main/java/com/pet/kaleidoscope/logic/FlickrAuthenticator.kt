@@ -1,4 +1,4 @@
-package com.pet.kaleidoscope.data
+package com.pet.kaleidoscope.logic
 
 import com.flickr4java.flickr.Flickr
 import com.flickr4java.flickr.FlickrException
@@ -9,8 +9,8 @@ import com.flickr4java.flickr.auth.Permission
 import com.github.scribejava.core.model.OAuth1RequestToken
 import com.github.scribejava.core.model.OAuth1Token
 import com.pet.kaleidoscope.Constants
-import com.pet.kaleidoscope.data.storage.FlickrOAuthData
-import com.pet.kaleidoscope.data.storage.FlickrRepository
+import com.pet.kaleidoscope.logic.storage.FlickrOAuthData
+import com.pet.kaleidoscope.logic.storage.FlickrRepository
 import com.pet.kaleidoscope.decode
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
