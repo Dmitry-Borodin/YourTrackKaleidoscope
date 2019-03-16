@@ -24,6 +24,8 @@ android {
     }
 }
 
+def koin_version = "2.0.0-beta-3"
+
 dependencies {
     implementation"org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     implementation 'androidx.appcompat:appcompat:1.0.2'
@@ -36,12 +38,17 @@ dependencies {
         exclude module: 'kotlin-stdlib'
     }
 
+    implementation "org.koin:koin-core:$koin_version"
+    implementation "org.koin:koin-android:$koin_version"
+    implementation "org.koin:koin-androidx-scope:$koin_version"
+
     implementation 'com.squareup.picasso:picasso:2.71828'
     implementation 'com.jakewharton.timber:timber:4.7.1'
     implementation 'com.viewbinder:viewbinder:0.4.1'
     implementation 'com.flickr4java:flickr4java:3.0.1'
 
     testImplementation 'junit:junit:4.12'
+    testImplementation "org.koin:koin-test:$koin_version"
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
 }
