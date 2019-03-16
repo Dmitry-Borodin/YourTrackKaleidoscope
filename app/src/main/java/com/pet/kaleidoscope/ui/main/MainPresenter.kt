@@ -1,11 +1,14 @@
 package com.pet.kaleidoscope.ui.main
 
+import android.Manifest
+import com.markodevcic.peko.Peko
 import com.pet.kaleidoscope.logic.FlickrAuthenticator
 import com.pet.kaleidoscope.logic.FlickrProvider
 import com.pet.kaleidoscope.ui.base.ScopedPresenter
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.koin.core.context.GlobalContext
+import timber.log.Timber
 
 /**
  * @author Dmitry Borodin on 2/22/19.
@@ -29,17 +32,32 @@ class MainPresenter : ScopedPresenter() {
 
     fun onStartStopButtonClicked() = launch(Dispatchers.Main) {
 
+        val grantedPermissions = if (Peko.isRequestInProgress()) {
+            Peko.resumeRequest()
+        } else {
+            Peko.requestPermissionsAsync(view!!.getActivity(), Manifest.permission.ACCESS_FINE_LOCATION)
+        }
+        Timber.d("result of permission request $grantedPermissions")
+        if (Manifest.permission.ACCESS_FINE_LOCATION !in grantedPermissions.grantedPermissions) {
+            //show dialog we need it
+            return@launch
+        }
+
         //checkPermissions, if not - request it
         val isAuthenticated = flickrAuth.hasReadPermissions() //?: view.showError no network?
 
         if (isAuthenticated != true) {
-            val url = flickrAuth.getAuthUrl()
-            view?.requestAuth(url)
+            startAuthFlow()
             return@launch
         }
 
         val url = flickrProvider.getFlickrPicUrl()
         view?.showPictures(listOf(url))
+    }
+
+    private suspend fun startAuthFlow() {
+        val url = flickrAuth.getAuthUrl()
+        view?.requestAuth(url)
     }
 
     fun onAuthRequestedSuccessfully(verification: String) = launch(Dispatchers.Main) {

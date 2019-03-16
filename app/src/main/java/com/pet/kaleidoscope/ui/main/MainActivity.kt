@@ -1,5 +1,6 @@
 package com.pet.kaleidoscope.ui.main
 
+import android.app.Activity
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -54,7 +55,6 @@ class MainActivity : AppCompatActivity(), MainView {
                 presenter.onAuthRequestedSuccessfully(verifier)
             }
         }
-//        FlickrAuthWebViewDialog(this, url, callback).show()
 
         FlickrVerifierDialog(this, callback).show()
         val intent = Intent(Intent.ACTION_VIEW).also {
@@ -62,4 +62,6 @@ class MainActivity : AppCompatActivity(), MainView {
         }
         startActivity(intent)
     }
+
+    override fun getActivity(): Activity = this
 }
