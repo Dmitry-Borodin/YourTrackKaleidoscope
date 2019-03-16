@@ -19,7 +19,6 @@ class App : Application() {
 
     override fun onCreate() {
         super.onCreate()
-        instance = this
         if (BuildConfig.DEBUG) {
             Timber.plant(Timber.DebugTree())
             Flickr.debugRequest = true
@@ -31,8 +30,4 @@ class App : Application() {
         }
     }
 
-    companion object {
-        @Volatile
-        lateinit var instance: App
-    }
 }

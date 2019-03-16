@@ -1,20 +1,20 @@
 package com.pet.kaleidoscope.data.storage
 
 import androidx.test.runner.AndroidJUnit4
-import com.pet.kaleidoscope.App
 import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.koin.test.KoinTest
 
 /**
  * @author Dmitry Borodin on 3/15/19.
  */
 @RunWith(AndroidJUnit4::class)
-class PreferencesRepositoryTest {
+class PreferencesRepositoryTest : KoinTest {
 
-    val repository: FlickrRepository = FlickrRepositoryImpl(App.instance, "testFile")
+    private val repository: FlickrRepository = getKoin().get()
 
     @Before
     fun setUp() {
