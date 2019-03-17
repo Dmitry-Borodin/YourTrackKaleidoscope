@@ -2,17 +2,14 @@ package com.pet.kaleidoscope.logic
 
 import com.flickr4java.flickr.Flickr
 import com.flickr4java.flickr.FlickrException
-import com.flickr4java.flickr.REST
 import com.flickr4java.flickr.RequestContext
 import com.flickr4java.flickr.auth.Auth
 import com.flickr4java.flickr.auth.Permission
 import com.github.scribejava.core.model.OAuth1RequestToken
 import com.github.scribejava.core.model.OAuth1Token
-import com.pet.kaleidoscope.Constants
+import com.pet.kaleidoscope.encode
 import com.pet.kaleidoscope.logic.storage.FlickrOAuthData
 import com.pet.kaleidoscope.logic.storage.FlickrRepository
-import com.pet.kaleidoscope.decode
-import com.pet.kaleidoscope.encode
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import timber.log.Timber
@@ -23,13 +20,10 @@ import timber.log.Timber
  * Currently not used, but auth will allwo us to show more precise pictures (especially from your own results).
  * This has to be implemented soon.
  */
-class FlickrAuthenticator(private val repository: FlickrRepository) {
+class FlickrAuthenticator(private val repository: FlickrRepository, private val flickr: Flickr) {
 
-    //TODO inject as a dependency
-    private val flickr = Flickr(Constants.FLICKR_API.decode(), Constants.FLICKR_SECRET.decode(), REST())
     private lateinit var requestToken: OAuth1RequestToken
 
-    //TODO
     suspend fun hasReadPermissions(): Boolean? = withContext(Dispatchers.IO) {
         val credentials = repository.oauthFlickrCredentials ?: return@withContext false
         Timber.d("loaded credentials, $credentials")
@@ -67,7 +61,8 @@ class FlickrAuthenticator(private val repository: FlickrRepository) {
             }
             RequestContext.getRequestContext().auth = auth
             flickr.auth = auth
-            repository.oauthFlickrCredentials = FlickrOAuthData(accessToken.token.encode(), accessToken.tokenSecret.encode())
+            repository.oauthFlickrCredentials =
+                FlickrOAuthData(accessToken.token.encode(), accessToken.tokenSecret.encode())
             // This token can be used until the user revokes it.
         } catch (e: FlickrException) {
             Timber.d(e)

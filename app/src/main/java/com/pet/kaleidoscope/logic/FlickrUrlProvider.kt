@@ -1,16 +1,14 @@
 package com.pet.kaleidoscope.logic
 
 import com.flickr4java.flickr.Flickr
-import com.flickr4java.flickr.REST
 import com.flickr4java.flickr.RequestContext
 import com.flickr4java.flickr.auth.Auth
 import com.flickr4java.flickr.auth.Permission
 import com.flickr4java.flickr.photos.GeoData
 import com.flickr4java.flickr.photos.SearchParameters
-import com.pet.kaleidoscope.Constants
-import com.pet.kaleidoscope.models.LatLong
-import com.pet.kaleidoscope.logic.storage.FlickrRepository
 import com.pet.kaleidoscope.decode
+import com.pet.kaleidoscope.logic.storage.FlickrRepository
+import com.pet.kaleidoscope.models.LatLong
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
@@ -18,8 +16,7 @@ import kotlinx.coroutines.withContext
 /**
  * @author Dmitry Borodin on 2/22/19.
  */
-class FlickrUrlProvider(private val repository: FlickrRepository) {
-    private val flickr = Flickr(Constants.FLICKR_API.decode(), Constants.FLICKR_SECRET.decode(), REST())
+class FlickrUrlProvider(private val repository: FlickrRepository, private val flickr: Flickr) {
 
     init {
         val auth = Auth().apply {

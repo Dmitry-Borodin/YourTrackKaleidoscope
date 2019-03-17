@@ -1,7 +1,11 @@
 package com.pet.kaleidoscope.di
 
+import com.flickr4java.flickr.Flickr
+import com.flickr4java.flickr.REST
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
+import com.pet.kaleidoscope.Constants
+import com.pet.kaleidoscope.decode
 import com.pet.kaleidoscope.logic.FlickrAuthenticator
 import com.pet.kaleidoscope.logic.FlickrUrlProvider
 import com.pet.kaleidoscope.logic.LocationProvider
@@ -18,8 +22,9 @@ import org.koin.dsl.module
 val appModule = module {
 
     single<FlickrRepository> { FlickrRepositoryImpl(appContext = get()) }
-    single { FlickrAuthenticator(repository = get()) }
-    single { FlickrUrlProvider(repository = get()) }
+    single { Flickr(Constants.FLICKR_API.decode(), Constants.FLICKR_SECRET.decode(), REST()) }
+    single { FlickrAuthenticator(repository = get(), flickr = get()) }
+    single { FlickrUrlProvider(repository = get(), flickr = get()) }
 
     single<FusedLocationProviderClient> { LocationServices.getFusedLocationProviderClient(androidContext()) }
     single { LocationProvider(appContext = get(), fusedLocationProviderClient = get(), flickrUrlProvider = get()) }
