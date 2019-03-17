@@ -1,12 +1,14 @@
 - create action bar at the top - check shadow. Light theme for status bar
 - style link for text
 - check whether I will add login for better results since it's ready anyway
-- remove minimap resources from the project
-- add description why I need location permission
 - service implement START_STICKY - handle state
 - download flickr url lazily when opening pictures - in case if there was no internet
-- notification click should open an app
 - Diffutil to not redraw old pictures
+- ConflatedBroadcastChannel instead of channel to keep the data
+- avoid races on mutable list passing through the channel -)
+
+
+
 
 
 
