@@ -46,6 +46,7 @@ class MainActivity : AppCompatActivity(), MainView {
 
     override fun setStateStopped() {
         startStopLink.text = getString(R.string.common_start)
+        adapter.items = mutableListOf()
     }
 
     override fun showPictures(urls: List<String?>) {

@@ -5,6 +5,7 @@
 - add description why I need location permission
 - service implement START_STICKY - handle state
 - download flickr url lazily when opening pictures - in case if there was no internet
+- notification click should open an app
 
 
 

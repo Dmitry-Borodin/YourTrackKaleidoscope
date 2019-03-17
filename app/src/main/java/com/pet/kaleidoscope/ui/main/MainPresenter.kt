@@ -1,6 +1,7 @@
 package com.pet.kaleidoscope.ui.main
 
 import android.Manifest
+import android.annotation.SuppressLint
 import com.markodevcic.peko.Peko
 import com.pet.kaleidoscope.logic.FlickrAuthenticator
 import com.pet.kaleidoscope.logic.FlickrUrlProvider
@@ -24,6 +25,7 @@ class MainPresenter(
     fun onAttach(view: MainView) {
         super.onAttach()
         this.view = view
+        //TODO check is tracking in progress
     }
 
     override fun onDetouch() {
@@ -33,26 +35,36 @@ class MainPresenter(
 
     fun onStartStopButtonClicked() = launch(Dispatchers.Main) {
 
-        //check permission
-        val grantedPermissions = if (Peko.isRequestInProgress()) {
-            Peko.resumeRequest()
+        if (locationProvider.isTrackingInProgress) {
+            locationProvider.stopLocationTracking()
+            view?.setStateStopped()
         } else {
-            Peko.requestPermissionsAsync(view!!.getActivity(), Manifest.permission.ACCESS_FINE_LOCATION)
-        }
-        Timber.d("result of permission request $grantedPermissions")
-        if (Manifest.permission.ACCESS_FINE_LOCATION !in grantedPermissions.grantedPermissions) {
-            //TODO show dialog we need it
-            return@launch
-        }
+            //check permission
+            val grantedPermissions = if (Peko.isRequestInProgress()) {
+                Peko.resumeRequest()
+            } else {
+                Peko.requestPermissionsAsync(view!!.getActivity(), Manifest.permission.ACCESS_FINE_LOCATION)
+            }
+            Timber.d("result of permission request $grantedPermissions")
+            if (Manifest.permission.ACCESS_FINE_LOCATION !in grantedPermissions.grantedPermissions) {
+                //TODO show dialog we need it
+                Timber.d("Don't have location permission")
+                return@launch
+            }
 
-        //check GPS enabled
-        val isGPSUsable = locationProvider.isGpsUsable()
-        if (isGPSUsable) {
-            //TODO show dialog enable GPS
-        }
+            //check GPS enabled
+            val isGPSUsable = locationProvider.isGpsUsable()
+            if (!isGPSUsable) {
+                //TODO show dialog enable GPS
+                Timber.d("GPS not usable")
+                return@launch
+            }
 
-        val url = flickrUrlProvider.getFlickrPicUrl()
-        view?.showPictures(listOf(url))
+            val channel = locationProvider.startLocationTracking()
+            for (point in channel) {
+                view?.showPictures(listOf(point.url))
+            }
+        }
     }
 
     fun requestAuthentication() = launch(Dispatchers.Main) {

@@ -1,12 +1,14 @@
 package com.pet.kaleidoscope.logic
 
+import android.Manifest
 import android.content.Context
 import android.content.Intent
-import android.location.Location
+import android.content.pm.PackageManager
 import android.os.Looper
-import androidx.annotation.RequiresPermission
+import androidx.core.app.ActivityCompat
 import com.google.android.gms.location.*
 import com.google.android.gms.tasks.Task
+import com.google.android.gms.tasks.Tasks
 import com.pet.kaleidoscope.Constants
 import com.pet.kaleidoscope.data.TrackingPoint
 import com.pet.kaleidoscope.data.toLatLong
@@ -19,6 +21,8 @@ import kotlinx.coroutines.withContext
 
 /**
  * @author Dmitry Borodin on 3/14/19.
+ *
+ * fixme it is currently mixing responsibilities of business logic and use-case
  */
 class LocationProvider(
     private val appContext: Context,
@@ -40,21 +44,28 @@ class LocationProvider(
 
     private fun Any.ignore(): Unit = Unit
 
-    @RequiresPermission(anyOf = ["android.permission.ACCESS_COARSE_LOCATION", "android.permission.ACCESS_FINE_LOCATION"])
     fun startLocationTracking(): Channel<TrackingPoint> {
         startForegroundService()
+        resultChannel = Channel()
         isTrackingInProgress = true
-        fusedLocationProviderClient.requestLocationUpdates(
-            locationRequest,
-            locationUpdateCallback,
-            Looper.getMainLooper()
-        )
+        if (ActivityCompat.checkSelfPermission(
+                appContext,
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ) == PackageManager.PERMISSION_GRANTED
+        ) {
+            fusedLocationProviderClient.requestLocationUpdates(
+                locationRequest,
+                locationUpdateCallback,
+                Looper.getMainLooper()
+            )
+        }
         return resultChannel
     }
 
     fun stopLocationTracking() {
         isTrackingInProgress = false
         fusedLocationProviderClient.removeLocationUpdates(locationUpdateCallback)
+        resultChannel.close()
         stopForegroundService()
     }
 
@@ -72,7 +83,6 @@ class LocationProvider(
         appContext.startService(intent)
     }
 
-
     private fun createLocationRequest(): LocationRequest {
         return LocationRequest().apply {
             priority = LocationRequest.PRIORITY_HIGH_ACCURACY
@@ -87,6 +97,8 @@ class LocationProvider(
             .build()
         val client: SettingsClient = LocationServices.getSettingsClient(appContext)
         val task: Task<LocationSettingsResponse> = client.checkLocationSettings(settingsRequest)
+        Tasks.await(task) //TODO create coroutines wrapper for tasks API
+        //TODO   java.util.concurrent.ExecutionException: com.google.android.gms.common.api.ResolvableApiException: 6: RESOLUTION_REQUIRED
         return@withContext task.result?.locationSettingsStates?.isGpsUsable == true
     }
 }
