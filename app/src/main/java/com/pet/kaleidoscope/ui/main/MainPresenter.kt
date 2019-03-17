@@ -25,7 +25,16 @@ class MainPresenter(
     fun onAttach(view: MainView) {
         super.onAttach()
         this.view = view
-        //TODO check is tracking in progress
+        if (locationProvider.isTrackingInProgress) {
+            view.setStateRunning()
+            launch {
+                for (point in locationProvider.resultChannel) {
+                    view.showPictures(listOf(point.url))
+                }
+            }
+        } else {
+            view.setStateStopped()
+        }
     }
 
     override fun onDetouch() {
@@ -57,9 +66,9 @@ class MainPresenter(
             if (!isGPSUsable) {
                 view?.showInformationDialog(view!!.getActivity().getString(R.string.gps_not_usable_message))
                 Timber.d("GPS not usable")
-                return@launch
             }
 
+            view?.setStateRunning()
             val channel = locationProvider.startLocationTracking()
             for (point in channel) {
                 view?.showPictures(listOf(point.url))

@@ -9,5 +9,5 @@
     <string name="notification_channel_tracking_name">Tracking Service</string>
     <string name="notification_channel_tracking_description">Required for reliability of tracking service</string>
     <string name="location_permission_missing_message">Tracking without location permission is not possible, please provide location permission</string>
-    <string name="gps_not_usable_message">GPS cannot be used at the moment. Please make sure GPS is enabled and try again, it is essential to have proper accuracy</string>
+    <string name="gps_not_usable_message">GPS cannot be used at the moment. Please enable GPS to have proper accuracy</string>
 </resources>
