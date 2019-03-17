@@ -30,7 +30,7 @@ class PicturesAdapter : RecyclerView.Adapter<PictureViewHolder>() {
     override fun getItemCount(): Int = items.size
 
     override fun onBindViewHolder(holder: PictureViewHolder, position: Int) {
-        holder.bind(items[position])
+        holder.bind(items[items.lastIndex - position])
     }
 }
 

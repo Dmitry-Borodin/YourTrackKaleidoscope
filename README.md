@@ -1,6 +1,6 @@
 Small test pet project
 
-Writes your track and show pictures for each 100 meters
+It tracks your movement every 100 meters and trying to find pictures in Flickr for them.
 
-Aim is to evaluate coroutines with runtime permissions, "nice" work with service et.c.
+Aim is to evaluate coroutines with runtime permissions, channels, Koin scopes et.c.
 
