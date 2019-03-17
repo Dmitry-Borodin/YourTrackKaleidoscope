@@ -47,10 +47,6 @@ class LocationProvider(
         }.ignore()
     }
     var isTrackingInProgress = false
-    set(value) {
-        field = value
-        Timber.e("isTracking set to $value")
-    }
 
     fun repeatLast() = GlobalScope.launch {
         resultChannel.send(currentLocationList)

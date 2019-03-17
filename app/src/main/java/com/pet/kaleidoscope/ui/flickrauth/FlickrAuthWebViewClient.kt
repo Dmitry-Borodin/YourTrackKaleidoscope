@@ -20,7 +20,6 @@ class FlickrAuthWebViewClient(val callback: FlickrAuthClientCallback) : WebViewC
                 "oauthVerifier is null during proper url parsing for auth"
             }
             callback.onSuccessIntercepted(oauthVerifier)
-            //TODO cancel dialog?
         }
     }
 }
