@@ -3,7 +3,7 @@ package com.pet.kaleidoscope.di
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.pet.kaleidoscope.logic.FlickrAuthenticator
-import com.pet.kaleidoscope.logic.FlickrProvider
+import com.pet.kaleidoscope.logic.FlickrUrlProvider
 import com.pet.kaleidoscope.logic.LocationProvider
 import com.pet.kaleidoscope.logic.storage.FlickrRepository
 import com.pet.kaleidoscope.logic.storage.FlickrRepositoryImpl
@@ -19,13 +19,12 @@ val appModule = module {
 
     single<FlickrRepository> { FlickrRepositoryImpl(appContext = get()) }
     single { FlickrAuthenticator(repository = get()) }
-    single { FlickrProvider(repository = get()) }
+    single { FlickrUrlProvider(repository = get()) }
 
-    scoped <FusedLocationProviderClient> { LocationServices.getFusedLocationProviderClient(androidContext()) }
-    scoped { LocationProvider(appContext = get(), fusedLocationProviderClient = get()) }
+    scoped<FusedLocationProviderClient> { LocationServices.getFusedLocationProviderClient(androidContext()) }
+    scoped { LocationProvider(appContext = get(), fusedLocationProviderClient = get(), flickrUrlProvider = get()) }
 
     scope<MainActivity> {
-
-        scoped { MainPresenter(flickrAuth = get(), flickrProvider = get(), locationProvider = get()) }
+        scoped { MainPresenter(flickrAuth = get(), flickrUrlProvider = get(), locationProvider = get()) }
     }
 }

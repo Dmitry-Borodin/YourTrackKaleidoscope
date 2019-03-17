@@ -1,10 +1,9 @@
 package com.pet.kaleidoscope.ui.main
 
 import android.Manifest
-import com.google.android.gms.location.FusedLocationProviderClient
 import com.markodevcic.peko.Peko
 import com.pet.kaleidoscope.logic.FlickrAuthenticator
-import com.pet.kaleidoscope.logic.FlickrProvider
+import com.pet.kaleidoscope.logic.FlickrUrlProvider
 import com.pet.kaleidoscope.logic.LocationProvider
 import com.pet.kaleidoscope.ui.base.ScopedPresenter
 import kotlinx.coroutines.Dispatchers
@@ -15,7 +14,7 @@ import timber.log.Timber
  * @author Dmitry Borodin on 2/22/19.
  */
 class MainPresenter(
-    private val flickrProvider: FlickrProvider,
+    private val flickrUrlProvider: FlickrUrlProvider,
     private val flickrAuth: FlickrAuthenticator,
     private val locationProvider: LocationProvider
 ) : ScopedPresenter() {
@@ -52,7 +51,7 @@ class MainPresenter(
             //TODO show dialog enable GPS
         }
 
-        val url = flickrProvider.getFlickrPicUrl()
+        val url = flickrUrlProvider.getFlickrPicUrl()
         view?.showPictures(listOf(url))
     }
 

@@ -8,6 +8,7 @@ import com.flickr4java.flickr.auth.Permission
 import com.flickr4java.flickr.photos.GeoData
 import com.flickr4java.flickr.photos.SearchParameters
 import com.pet.kaleidoscope.Constants
+import com.pet.kaleidoscope.data.LatLong
 import com.pet.kaleidoscope.logic.storage.FlickrRepository
 import com.pet.kaleidoscope.decode
 import kotlinx.coroutines.Dispatchers
@@ -17,7 +18,7 @@ import kotlinx.coroutines.withContext
 /**
  * @author Dmitry Borodin on 2/22/19.
  */
-class FlickrProvider(private val repository: FlickrRepository) {
+class FlickrUrlProvider(private val repository: FlickrRepository) {
     private val flickr = Flickr(Constants.FLICKR_API.decode(), Constants.FLICKR_SECRET.decode(), REST())
 
     init {
@@ -30,9 +31,10 @@ class FlickrProvider(private val repository: FlickrRepository) {
         RequestContext.getRequestContext().auth = auth
     }
 
-    suspend fun getFlickrPicUrl(): String? = withContext(Dispatchers.IO) {
-        val geoData = GeoData("48.136553", "11.565598", Flickr.ACCURACY_REGION.toString())
+    suspend fun getFlickrPicUrl(latLong: LatLong): String? = withContext(Dispatchers.IO) {
+//        val geoData = GeoData("48.136553", "11.565598", Flickr.ACCURACY_REGION.toString())
 
+        val geoData = GeoData(latLong.longitude.toString(), latLong.latitude.toString(), Flickr.ACCURACY_REGION.toString())
         val searchParameters = SearchParameters().apply {
             latitude = geoData.latitude.toString()
             longitude = geoData.longitude.toString()

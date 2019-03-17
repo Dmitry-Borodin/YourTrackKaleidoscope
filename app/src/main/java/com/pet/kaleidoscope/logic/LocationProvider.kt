@@ -8,6 +8,8 @@ import androidx.annotation.RequiresPermission
 import com.google.android.gms.location.*
 import com.google.android.gms.tasks.Task
 import com.pet.kaleidoscope.Constants
+import com.pet.kaleidoscope.data.TrackingPoint
+import com.pet.kaleidoscope.data.toLatLong
 import com.pet.kaleidoscope.service.LocationService
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -20,22 +22,26 @@ import kotlinx.coroutines.withContext
  */
 class LocationProvider(
     private val appContext: Context,
-    private val fusedLocationProviderClient: FusedLocationProviderClient //supporting gms only since it's a pet project
+    private val fusedLocationProviderClient: FusedLocationProviderClient, //supporting gms only since it's a pet project
+    private val flickrUrlProvider: FlickrUrlProvider
 ) {
 
+    var resultChannel: Channel<TrackingPoint> = Channel()
     private val locationRequest: LocationRequest = createLocationRequest()
     private val locationUpdateCallback = object : LocationCallback() {
         override fun onLocationResult(locationResult: LocationResult?): Unit = GlobalScope.launch {
-            resultChannel.send(locationResult?.lastLocation)
+            val location = locationResult?.lastLocation?.toLatLong() ?: return@launch
+            val timeStamp = System.currentTimeMillis()
+            val url = flickrUrlProvider.getFlickrPicUrl(location)
+            resultChannel.send(TrackingPoint(location = location, timestamp = timeStamp, url = url))
         }.ignore()
     }
     var isTrackingInProgress = false
-    var resultChannel: Channel<Location?> = Channel()
 
     private fun Any.ignore(): Unit = Unit
 
     @RequiresPermission(anyOf = ["android.permission.ACCESS_COARSE_LOCATION", "android.permission.ACCESS_FINE_LOCATION"])
-    fun startLocationTracking(): Channel<Location?> {
+    fun startLocationTracking(): Channel<TrackingPoint> {
         startForegroundService()
         isTrackingInProgress = true
         fusedLocationProviderClient.requestLocationUpdates(

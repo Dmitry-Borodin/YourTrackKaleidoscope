@@ -19,6 +19,9 @@ import timber.log.Timber
 
 /**
  * @author Dmitry Borodin on 3/13/19.
+ *
+ * Currently not used, but auth will allwo us to show more precise pictures (especially from your own results).
+ * This has to be implemented soon.
  */
 class FlickrAuthenticator(private val repository: FlickrRepository) {
 
