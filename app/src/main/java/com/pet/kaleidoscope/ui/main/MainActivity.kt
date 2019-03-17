@@ -12,6 +12,8 @@ import com.pet.kaleidoscope.R
 import com.pet.kaleidoscope.ui.flickrauth.FlickrAuthClientCallback
 import com.pet.kaleidoscope.ui.flickrauth.FlickrVerifierDialog
 import com.viewbinder.bindView
+import org.koin.android.scope.bindScope
+import org.koin.android.scope.getActivityScope
 
 
 class MainActivity : AppCompatActivity(), MainView {
@@ -20,12 +22,13 @@ class MainActivity : AppCompatActivity(), MainView {
     private val recycler by bindView<RecyclerView>(R.id.activity_main_recycler)
 
     private val adapter = PicturesAdapter()
-    private val presenter = MainPresenter()
+    private val presenter: MainPresenter by getActivityScope().inject()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         setSupportActionBar(findViewById(R.id.toolbar))
+        bindScope(getActivityScope())
         presenter.onAttach(this)
         recycler.adapter = adapter
         recycler.layoutManager = LinearLayoutManager(this)

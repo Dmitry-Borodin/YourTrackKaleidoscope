@@ -17,7 +17,7 @@ class LocationProvider(private val appContext: Context,
                        private val fusedLocationProviderClient: FusedLocationProviderClient) { //supporting gms only since it's a pet project
 
     private val locationRequest: LocationRequest = createLocationRequest()
-    val locationSettiongs
+//    val locationSettiongs
     var isTrackingInProgress = false
     var resultChannel: Channel<Location> = Channel()
 
@@ -60,6 +60,5 @@ class LocationProvider(private val appContext: Context,
         val client: SettingsClient = LocationServices.getSettingsClient(appContext)
         val task: Task<LocationSettingsResponse> = client.checkLocationSettings(settingsRequest)
         return@withContext task.result?.locationSettingsStates?.isGpsUsable == true
-
     }
 }

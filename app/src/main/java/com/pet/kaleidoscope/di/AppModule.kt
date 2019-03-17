@@ -7,6 +7,8 @@ import com.pet.kaleidoscope.logic.FlickrProvider
 import com.pet.kaleidoscope.logic.LocationProvider
 import com.pet.kaleidoscope.logic.storage.FlickrRepository
 import com.pet.kaleidoscope.logic.storage.FlickrRepositoryImpl
+import com.pet.kaleidoscope.ui.main.MainActivity
+import com.pet.kaleidoscope.ui.main.MainPresenter
 import org.koin.dsl.module
 
 /**
@@ -18,7 +20,9 @@ val appModule = module {
     single { FlickrAuthenticator(repository = get()) }
     single { FlickrProvider(repository = get()) }
 
-    single<FusedLocationProviderClient> { LocationServices.getFusedLocationProviderClient(get()) }
-    single { LocationProvider(appContext = get(), fusedLocationProviderClient = get())  }
-
+    scope<MainActivity> {
+//        scoped <FusedLocationProviderClient> { LocationServices.getFusedLocationProviderClient(get()) }
+//        scoped { LocationProvider(appContext = get(), fusedLocationProviderClient = get()) }
+        scoped { MainPresenter(flickrAuth = get(), flickrProvider = get()) }
+    }
 }

@@ -1,6 +1,7 @@
 package com.pet.kaleidoscope.ui.main
 
 import android.Manifest
+import com.google.android.gms.location.FusedLocationProviderClient
 import com.markodevcic.peko.Peko
 import com.pet.kaleidoscope.logic.FlickrAuthenticator
 import com.pet.kaleidoscope.logic.FlickrProvider
@@ -8,17 +9,21 @@ import com.pet.kaleidoscope.logic.LocationProvider
 import com.pet.kaleidoscope.ui.base.ScopedPresenter
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import org.koin.core.context.GlobalContext
 import timber.log.Timber
 
 /**
  * @author Dmitry Borodin on 2/22/19.
  */
-class MainPresenter : ScopedPresenter() {
-
-    private val flickrProvider: FlickrProvider by GlobalContext.get().koin.inject()
-    private val flickrAuth: FlickrAuthenticator by GlobalContext.get().koin.inject()
-    private val locationProvider: LocationProvider by GlobalContext.get().koin.inject()
+class MainPresenter(
+    private val flickrProvider: FlickrProvider,
+    private val flickrAuth: FlickrAuthenticator
+) : ScopedPresenter() {
+    private val locationProvider: LocationProvider by lazy {
+        LocationProvider(
+            view!!.getActivity(),
+            FusedLocationProviderClient(view!!.getActivity())
+        )
+    }
 
     var view: MainView? = null
 
