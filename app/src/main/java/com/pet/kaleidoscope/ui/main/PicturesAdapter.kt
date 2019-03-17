@@ -7,6 +7,7 @@ import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
 import com.pet.kaleidoscope.R
 import com.squareup.picasso.Picasso
+import com.viewbinder.bindView
 import timber.log.Timber
 
 /**
@@ -34,6 +35,7 @@ class PicturesAdapter : RecyclerView.Adapter<PictureViewHolder>() {
 }
 
 class PictureViewHolder(val view: View) : RecyclerView.ViewHolder(view) {
+    private val imageView = view.findViewById<ImageView>(R.id.item_image_view)
 
     fun bind(url: String) {
         if (url.isEmpty()) {
@@ -44,7 +46,7 @@ class PictureViewHolder(val view: View) : RecyclerView.ViewHolder(view) {
             Picasso.get()
                 .load(url)
                 .fit()
-                .into(view as ImageView)
+                .into(imageView)
         }
     }
 }

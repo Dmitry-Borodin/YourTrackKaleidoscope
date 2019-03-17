@@ -19,6 +19,7 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import timber.log.Timber
 import java.util.concurrent.ExecutionException
 
 /**
@@ -46,6 +47,14 @@ class LocationProvider(
         }.ignore()
     }
     var isTrackingInProgress = false
+    set(value) {
+        field = value
+        Timber.e("isTracking set to $value")
+    }
+
+    fun repeatLast() = GlobalScope.launch {
+        resultChannel.send(currentLocationList)
+    }
 
     private fun Any.ignore(): Unit = Unit
 

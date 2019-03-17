@@ -21,8 +21,8 @@ val appModule = module {
     single { FlickrAuthenticator(repository = get()) }
     single { FlickrUrlProvider(repository = get()) }
 
-    scoped<FusedLocationProviderClient> { LocationServices.getFusedLocationProviderClient(androidContext()) }
-    scoped { LocationProvider(appContext = get(), fusedLocationProviderClient = get(), flickrUrlProvider = get()) }
+    single<FusedLocationProviderClient> { LocationServices.getFusedLocationProviderClient(androidContext()) }
+    single { LocationProvider(appContext = get(), fusedLocationProviderClient = get(), flickrUrlProvider = get()) }
 
     scope<MainActivity> {
         scoped { MainPresenter(flickrAuth = get(), locationProvider = get()) }

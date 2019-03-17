@@ -9,6 +9,7 @@ import com.pet.kaleidoscope.logic.LocationProvider
 import com.pet.kaleidoscope.models.TrackingPoint
 import com.pet.kaleidoscope.ui.base.ScopedPresenter
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.channels.last
 import kotlinx.coroutines.launch
 import timber.log.Timber
 
@@ -20,8 +21,8 @@ class MainPresenter(
     private val locationProvider: LocationProvider
 ) : ScopedPresenter() {
 
-    var view: MainView? = null
-    var gpsRequested = false
+    private var view: MainView? = null
+    private var gpsRequested = false
 
     fun onAttach(view: MainView) {
         super.onAttach()
@@ -29,6 +30,7 @@ class MainPresenter(
         if (locationProvider.isTrackingInProgress) {
             view.setStateRunning()
             launch {
+                locationProvider.repeatLast()
                 for (points in locationProvider.resultChannel) {
                     showPointOnScreen(points)
                 }
@@ -44,7 +46,6 @@ class MainPresenter(
     }
 
     fun onStartStopButtonClicked() = launch(Dispatchers.Main) {
-
         if (locationProvider.isTrackingInProgress) {
             locationProvider.stopLocationTracking()
             view?.setStateStopped()
