@@ -41,6 +41,8 @@ class LocationService : Service() {
             .setContentText(getString(R.string.notification_tracking_content))
             .setSmallIcon(R.drawable.ic_launcher)
             .setContentIntent(contentIntent)
+            .setOngoing(true)
+            .setPriority(NotificationCompat.PRIORITY_LOW)
             .build()
         startForeground(1, notification)
     }
@@ -53,7 +55,7 @@ class LocationService : Service() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val name = getString(R.string.notification_channel_tracking_name)
             val descriptionText = getString(R.string.notification_channel_tracking_description)
-            val importance = NotificationManager.IMPORTANCE_HIGH
+            val importance = NotificationManager.IMPORTANCE_LOW
             val channel = NotificationChannel(CHANNEL_SERVICE_NOTOFICATION, name, importance)
             channel.description = descriptionText
             val notificationManager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
