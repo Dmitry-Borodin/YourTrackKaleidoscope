@@ -16,14 +16,9 @@ import timber.log.Timber
  */
 class MainPresenter(
     private val flickrProvider: FlickrProvider,
-    private val flickrAuth: FlickrAuthenticator
+    private val flickrAuth: FlickrAuthenticator,
+    private val locationProvider: LocationProvider
 ) : ScopedPresenter() {
-    private val locationProvider: LocationProvider by lazy {
-        LocationProvider(
-            view!!.getActivity(),
-            FusedLocationProviderClient(view!!.getActivity())
-        )
-    }
 
     var view: MainView? = null
 
