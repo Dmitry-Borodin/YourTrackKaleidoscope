@@ -32,22 +32,26 @@ class LocationProvider(
     private val flickrUrlProvider: FlickrUrlProvider
 ) {
 
-    var resultChannel: Channel<TrackingPoint> = Channel()
+    var resultChannel: Channel<List<TrackingPoint>> = Channel()
+    var currentLocationList: MutableList<TrackingPoint> = mutableListOf()
+
     private val locationRequest: LocationRequest = createLocationRequest()
     private val locationUpdateCallback = object : LocationCallback() {
         override fun onLocationResult(locationResult: LocationResult?): Unit = GlobalScope.launch {
             val location = locationResult?.lastLocation?.toLatLong() ?: return@launch
             val timeStamp = System.currentTimeMillis()
             val url = flickrUrlProvider.getFlickrPicUrl(location)
-            resultChannel.send(TrackingPoint(location = location, timestamp = timeStamp, url = url))
+            currentLocationList.add(TrackingPoint(location = location, timestamp = timeStamp, url = url))
+            resultChannel.send(currentLocationList)
         }.ignore()
     }
     var isTrackingInProgress = false
 
     private fun Any.ignore(): Unit = Unit
 
-    fun startLocationTracking(): Channel<TrackingPoint> {
+    fun startLocationTracking(): Channel<List<TrackingPoint>> {
         startForegroundService()
+        currentLocationList.clear()
         resultChannel = Channel()
         isTrackingInProgress = true
         if (ActivityCompat.checkSelfPermission(

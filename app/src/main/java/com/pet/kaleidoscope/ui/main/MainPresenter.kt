@@ -6,6 +6,7 @@ import com.pet.kaleidoscope.R
 import com.pet.kaleidoscope.logic.FlickrAuthenticator
 import com.pet.kaleidoscope.logic.FlickrUrlProvider
 import com.pet.kaleidoscope.logic.LocationProvider
+import com.pet.kaleidoscope.models.TrackingPoint
 import com.pet.kaleidoscope.ui.base.ScopedPresenter
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -15,12 +16,12 @@ import timber.log.Timber
  * @author Dmitry Borodin on 2/22/19.
  */
 class MainPresenter(
-    private val flickrUrlProvider: FlickrUrlProvider,
     private val flickrAuth: FlickrAuthenticator,
     private val locationProvider: LocationProvider
 ) : ScopedPresenter() {
 
     var view: MainView? = null
+    var gpsRequested = false
 
     fun onAttach(view: MainView) {
         super.onAttach()
@@ -28,8 +29,8 @@ class MainPresenter(
         if (locationProvider.isTrackingInProgress) {
             view.setStateRunning()
             launch {
-                for (point in locationProvider.resultChannel) {
-                    view.showPictures(listOf(point.url))
+                for (points in locationProvider.resultChannel) {
+                    showPointOnScreen(points)
                 }
             }
         } else {
@@ -63,17 +64,23 @@ class MainPresenter(
 
             //check GPS enabled
             val isGPSUsable = locationProvider.isGpsUsable()
-            if (!isGPSUsable) {
+            if (!isGPSUsable && !gpsRequested) {
                 view?.showInformationDialog(view!!.getActivity().getString(R.string.gps_not_usable_message))
+                gpsRequested = true
                 Timber.d("GPS not usable")
             }
 
             view?.setStateRunning()
             val channel = locationProvider.startLocationTracking()
-            for (point in channel) {
-                view?.showPictures(listOf(point.url))
+            for (points in channel) {
+                showPointOnScreen(points)
             }
         }
+    }
+
+    private fun showPointOnScreen(points: List<TrackingPoint>) {
+        val urlList = points.asSequence().distinctBy { it.url }.map { it.url }.toList()
+        view?.showPictures(urlList)
     }
 
     fun requestAuthentication() = launch(Dispatchers.Main) {

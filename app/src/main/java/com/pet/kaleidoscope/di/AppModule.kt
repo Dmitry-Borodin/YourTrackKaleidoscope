@@ -25,6 +25,6 @@ val appModule = module {
     scoped { LocationProvider(appContext = get(), fusedLocationProviderClient = get(), flickrUrlProvider = get()) }
 
     scope<MainActivity> {
-        scoped { MainPresenter(flickrAuth = get(), flickrUrlProvider = get(), locationProvider = get()) }
+        scoped { MainPresenter(flickrAuth = get(), locationProvider = get()) }
     }
 }

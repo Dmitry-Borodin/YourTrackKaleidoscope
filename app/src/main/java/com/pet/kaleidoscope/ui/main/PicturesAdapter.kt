@@ -16,6 +16,7 @@ class PicturesAdapter : RecyclerView.Adapter<PictureViewHolder>() {
 
     var items: MutableList<String> = mutableListOf()
         set(value) {
+            if (field == value) return
             field = value
             notifyDataSetChanged()
         }

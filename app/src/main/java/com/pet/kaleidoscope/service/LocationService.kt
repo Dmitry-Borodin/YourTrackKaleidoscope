@@ -8,6 +8,9 @@ import android.os.Build
 import android.os.IBinder
 import androidx.core.app.NotificationCompat
 import com.pet.kaleidoscope.R
+import android.app.PendingIntent
+import com.pet.kaleidoscope.ui.main.MainActivity
+
 
 /**
  * @author Dmitry Borodin on 3/16/19.
@@ -32,9 +35,12 @@ class LocationService : Service() {
 
     private fun startForeground() {
         createNotificationChannel()
+        val contentIntent = PendingIntent.getActivity(this, 0,
+            Intent(this, MainActivity::class.java), 0)
         val notification = NotificationCompat.Builder(this, CHANNEL_SERVICE_NOTOFICATION)
             .setContentText(getString(R.string.notification_tracking_content))
             .setSmallIcon(R.drawable.ic_launcher)
+            .setContentIntent(contentIntent)
             .build()
         startForeground(1, notification)
     }

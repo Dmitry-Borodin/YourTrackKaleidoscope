@@ -32,7 +32,6 @@ class FlickrUrlProvider(private val repository: FlickrRepository) {
     }
 
     suspend fun getFlickrPicUrl(latLong: LatLong): String? = withContext(Dispatchers.IO) {
-//        val geoData = GeoData("48.136553", "11.565598", Flickr.ACCURACY_REGION.toString())
 
         val geoData = GeoData(latLong.longitude.toString(), latLong.latitude.toString(), Flickr.ACCURACY_REGION.toString())
         val searchParameters = SearchParameters().apply {
