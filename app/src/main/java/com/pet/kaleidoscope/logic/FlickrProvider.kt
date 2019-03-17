@@ -22,9 +22,10 @@ class FlickrProvider(private val repository: FlickrRepository) {
 
     init {
         val auth = Auth().apply {
-            this.token = Constants.OAUTH_TOKEN.decode()
-            tokenSecret = Constants.OAUTH_TOKEN_SECRET.decode()
-            permission = Permission.WRITE
+            val credentials = repository.oauthFlickrCredentials ?: return@apply
+            this.token = credentials.token.decode()
+            tokenSecret = credentials.tokenSecret.decode()
+            permission = Permission.READ
         }
         RequestContext.getRequestContext().auth = auth
     }

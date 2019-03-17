@@ -12,6 +12,7 @@ import com.pet.kaleidoscope.Constants
 import com.pet.kaleidoscope.logic.storage.FlickrOAuthData
 import com.pet.kaleidoscope.logic.storage.FlickrRepository
 import com.pet.kaleidoscope.decode
+import com.pet.kaleidoscope.encode
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import timber.log.Timber
@@ -63,7 +64,7 @@ class FlickrAuthenticator(private val repository: FlickrRepository) {
             }
             RequestContext.getRequestContext().auth = auth
             flickr.auth = auth
-            repository.oauthFlickrCredentials = FlickrOAuthData(accessToken.token, accessToken.tokenSecret)
+            repository.oauthFlickrCredentials = FlickrOAuthData(accessToken.token.encode(), accessToken.tokenSecret.encode())
             // This token can be used until the user revokes it.
         } catch (e: FlickrException) {
             Timber.d(e)
