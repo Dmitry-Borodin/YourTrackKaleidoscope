@@ -6,6 +6,7 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Looper
 import androidx.core.app.ActivityCompat
+import com.google.android.gms.common.api.ResolvableApiException
 import com.google.android.gms.location.*
 import com.google.android.gms.tasks.Task
 import com.google.android.gms.tasks.Tasks
@@ -18,6 +19,7 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.util.concurrent.ExecutionException
 
 /**
  * @author Dmitry Borodin on 3/14/19.
@@ -86,7 +88,7 @@ class LocationProvider(
     private fun createLocationRequest(): LocationRequest {
         return LocationRequest().apply {
             priority = LocationRequest.PRIORITY_HIGH_ACCURACY
-            interval = 1000 * 5
+            interval = Constants.GPS_REQUEST_INTERVAL_MS.toLong()
             smallestDisplacement = Constants.MINIMIM_DISTANCE_THRESHOLD_IN_METERS.toFloat()
         }
     }
@@ -97,8 +99,14 @@ class LocationProvider(
             .build()
         val client: SettingsClient = LocationServices.getSettingsClient(appContext)
         val task: Task<LocationSettingsResponse> = client.checkLocationSettings(settingsRequest)
-        Tasks.await(task) //TODO create coroutines wrapper for tasks API
-        //TODO   java.util.concurrent.ExecutionException: com.google.android.gms.common.api.ResolvableApiException: 6: RESOLUTION_REQUIRED
+        try {
+            Tasks.await(task) //TODO create coroutines wrapper for tasks API
+        } catch (e: ExecutionException) {
+            return@withContext false
+        }
+        catch (e: ResolvableApiException) {
+            return@withContext false
+        }
         return@withContext task.result?.locationSettingsStates?.isGpsUsable == true
     }
 }

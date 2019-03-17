@@ -1,7 +1,6 @@
 package com.pet.kaleidoscope.ui.main
 
 import android.Manifest
-import android.annotation.SuppressLint
 import com.markodevcic.peko.Peko
 import com.pet.kaleidoscope.logic.FlickrAuthenticator
 import com.pet.kaleidoscope.logic.FlickrUrlProvider
