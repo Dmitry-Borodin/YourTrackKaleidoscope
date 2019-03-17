@@ -11,4 +11,5 @@ interface MainView {
     fun showPictures(urls: List<String?>)
     fun requestAuth(url: String)
     fun getActivity() : Activity
+    fun showInformationDialog(text: String)
 }

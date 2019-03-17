@@ -5,6 +5,7 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.widget.TextView
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -68,4 +69,12 @@ class MainActivity : AppCompatActivity(), MainView {
     }
 
     override fun getActivity(): Activity = this
+
+    override fun showInformationDialog(text: String) {
+        AlertDialog.Builder(this)
+            .setCancelable(true)
+            .setMessage(text)
+            .setNeutralButton(R.string.common_ok) { dialog, which -> dialog.dismiss() }
+            .create().show()
+    }
 }

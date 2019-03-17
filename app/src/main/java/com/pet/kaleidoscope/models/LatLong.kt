@@ -1,4 +1,4 @@
-package com.pet.kaleidoscope.data
+package com.pet.kaleidoscope.models
 
 import android.location.Location
 

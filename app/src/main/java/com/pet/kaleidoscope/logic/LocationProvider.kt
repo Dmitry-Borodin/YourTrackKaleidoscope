@@ -11,8 +11,8 @@ import com.google.android.gms.location.*
 import com.google.android.gms.tasks.Task
 import com.google.android.gms.tasks.Tasks
 import com.pet.kaleidoscope.Constants
-import com.pet.kaleidoscope.data.TrackingPoint
-import com.pet.kaleidoscope.data.toLatLong
+import com.pet.kaleidoscope.models.TrackingPoint
+import com.pet.kaleidoscope.models.toLatLong
 import com.pet.kaleidoscope.service.LocationService
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope

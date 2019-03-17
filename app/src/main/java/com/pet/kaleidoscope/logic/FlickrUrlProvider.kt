@@ -8,7 +8,7 @@ import com.flickr4java.flickr.auth.Permission
 import com.flickr4java.flickr.photos.GeoData
 import com.flickr4java.flickr.photos.SearchParameters
 import com.pet.kaleidoscope.Constants
-import com.pet.kaleidoscope.data.LatLong
+import com.pet.kaleidoscope.models.LatLong
 import com.pet.kaleidoscope.logic.storage.FlickrRepository
 import com.pet.kaleidoscope.decode
 import kotlinx.coroutines.Dispatchers

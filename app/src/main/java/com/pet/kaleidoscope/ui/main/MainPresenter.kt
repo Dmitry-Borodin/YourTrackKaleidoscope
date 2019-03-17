@@ -2,6 +2,7 @@ package com.pet.kaleidoscope.ui.main
 
 import android.Manifest
 import com.markodevcic.peko.Peko
+import com.pet.kaleidoscope.R
 import com.pet.kaleidoscope.logic.FlickrAuthenticator
 import com.pet.kaleidoscope.logic.FlickrUrlProvider
 import com.pet.kaleidoscope.logic.LocationProvider
@@ -46,7 +47,7 @@ class MainPresenter(
             }
             Timber.d("result of permission request $grantedPermissions")
             if (Manifest.permission.ACCESS_FINE_LOCATION !in grantedPermissions.grantedPermissions) {
-                //TODO show dialog we need it
+                view?.showInformationDialog(view!!.getActivity().getString(R.string.location_permission_missing_message))
                 Timber.d("Don't have location permission")
                 return@launch
             }
@@ -54,7 +55,7 @@ class MainPresenter(
             //check GPS enabled
             val isGPSUsable = locationProvider.isGpsUsable()
             if (!isGPSUsable) {
-                //TODO show dialog enable GPS
+                view?.showInformationDialog(view!!.getActivity().getString(R.string.gps_not_usable_message))
                 Timber.d("GPS not usable")
                 return@launch
             }

@@ -27,9 +27,9 @@ def koin_version = "2.0.0-beta-1"
 
 dependencies {
     implementation"org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    implementation 'androidx.appcompat:appcompat:1.1.0-alpha03'
+    implementation "androidx.appcompat:appcompat:1.1.0-alpha03"
     implementation "androidx.recyclerview:recyclerview:1.0.0"
-    implementation 'androidx.core:core-ktx:1.1.0-alpha04'
+    implementation "androidx.core:core-ktx:1.1.0-alpha05"
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:$rootProject.kotlin_coroutines_version") {
         exclude module: 'kotlin-stdlib'
     }
@@ -37,7 +37,7 @@ dependencies {
         exclude module: 'kotlin-stdlib'
     }
 
-    implementation 'com.markodevcic.peko:peko:1.0.0'
+    implementation 'com.markodevcic.peko:peko:1.0.0' //peko has quite strange API, consider implement own solution
     implementation "org.koin:koin-core:$koin_version"
     implementation "org.koin:koin-android:$koin_version"
     implementation "org.koin:koin-android-scope:$koin_version"
