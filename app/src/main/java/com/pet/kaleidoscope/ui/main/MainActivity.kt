@@ -10,6 +10,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.pet.kaleidoscope.R
+import com.pet.kaleidoscope.models.TrackingPoint
 import com.pet.kaleidoscope.ui.flickrauth.FlickrAuthClientCallback
 import com.pet.kaleidoscope.ui.flickrauth.FlickrVerifierDialog
 import com.viewbinder.bindView
@@ -50,8 +51,8 @@ class MainActivity : AppCompatActivity(), MainView {
         adapter.items = mutableListOf()
     }
 
-    override fun showPictures(urls: List<String?>) {
-        adapter.items = urls.filterNotNull().toMutableList()
+    override fun showPictures(urls: List<TrackingPoint>) {
+        adapter.items = urls.toMutableList()
     }
 
     override fun requestAuth(url: String) {

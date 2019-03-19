@@ -80,7 +80,7 @@ class MainPresenter(
     }
 
     private fun showPointOnScreen(points: List<TrackingPoint>) {
-        val urlList = points.asSequence().distinctBy { it.url }.map { it.url }.toList()
+        val urlList = points.asSequence().distinctBy { it.url }.toList()
         view?.showPictures(urlList)
     }
 
