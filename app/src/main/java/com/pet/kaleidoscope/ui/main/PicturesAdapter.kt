@@ -43,8 +43,7 @@ class PictureViewHolder(val view: View) : RecyclerView.ViewHolder(view) {
     private val textView = view.findViewById<TextView>(R.id.item_imave_text)
 
     fun bind(point: TrackingPoint) {
-        Timber.e("binding point $point")
-        textView.text = "timestamp = ${point.timestamp.getTimeText()} and location is  ${point.location.latitude} , ${point.location.longitude}"
+        textView.text = "time = ${point.timestamp.getTimeText()}; location is  ${point.location.latitude} , ${point.location.longitude}"
         if (point.url.isNullOrBlank()) {
             Timber.e("trying to bind empty string url to image view")
             view.visibility = View.INVISIBLE
