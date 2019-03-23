@@ -14,11 +14,10 @@ import com.pet.kaleidoscope.Constants
 import com.pet.kaleidoscope.models.TrackingPoint
 import com.pet.kaleidoscope.models.toLatLong
 import com.pet.kaleidoscope.service.LocationService
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.channels.ConflatedBroadcastChannel
+import kotlinx.coroutines.channels.SendChannel
 import timber.log.Timber
 import java.util.concurrent.ExecutionException
 
@@ -27,14 +26,16 @@ import java.util.concurrent.ExecutionException
  *
  * fixme it is currently mixing responsibilities of business logic and use-case
  */
+@ExperimentalCoroutinesApi
 class LocationProvider(
     private val appContext: Context,
     private val fusedLocationProviderClient: FusedLocationProviderClient, //supporting gms only since it's a pet project
     private val flickrUrlProvider: FlickrUrlProvider
 ) {
 
-    var resultChannel: Channel<List<TrackingPoint>> = Channel()
-    var currentLocationList: MutableList<TrackingPoint> = mutableListOf()
+    var resultChannel: ConflatedBroadcastChannel<List<TrackingPoint>> = ConflatedBroadcastChannel()
+    val currentLocationList: MutableList<TrackingPoint> = mutableListOf()
+    val isTrackingInProgress = resultChannel.valueOrNull != null
 
     private val locationRequest: LocationRequest = createLocationRequest()
     private val locationUpdateCallback = object : LocationCallback() {
@@ -46,19 +47,12 @@ class LocationProvider(
             resultChannel.send(currentLocationList)
         }.ignore()
     }
-    var isTrackingInProgress = false
-
-    fun repeatLast() = GlobalScope.launch {
-        resultChannel.send(currentLocationList)
-    }
 
     private fun Any.ignore(): Unit = Unit
 
-    fun startLocationTracking(): Channel<List<TrackingPoint>> {
+    fun startLocationTracking(): ConflatedBroadcastChannel<List<TrackingPoint>> {
         startForegroundService()
-        currentLocationList.clear()
-        resultChannel = Channel()
-        isTrackingInProgress = true
+        GlobalScope.launch { resultChannel.send(listOf()) }
         if (ActivityCompat.checkSelfPermission(
                 appContext,
                 Manifest.permission.ACCESS_FINE_LOCATION
@@ -74,9 +68,10 @@ class LocationProvider(
     }
 
     fun stopLocationTracking() {
-        isTrackingInProgress = false
         fusedLocationProviderClient.removeLocationUpdates(locationUpdateCallback)
+        currentLocationList.clear()
         resultChannel.close()
+        resultChannel = ConflatedBroadcastChannel()
         stopForegroundService()
     }
 

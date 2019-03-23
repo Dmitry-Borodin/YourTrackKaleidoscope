@@ -4,18 +4,19 @@ import android.Manifest
 import com.markodevcic.peko.Peko
 import com.pet.kaleidoscope.R
 import com.pet.kaleidoscope.logic.FlickrAuthenticator
-import com.pet.kaleidoscope.logic.FlickrUrlProvider
 import com.pet.kaleidoscope.logic.LocationProvider
 import com.pet.kaleidoscope.models.TrackingPoint
 import com.pet.kaleidoscope.ui.base.ScopedPresenter
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.channels.last
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.channels.ReceiveChannel
 import kotlinx.coroutines.launch
 import timber.log.Timber
 
 /**
  * @author Dmitry Borodin on 2/22/19.
  */
+@ExperimentalCoroutinesApi
 class MainPresenter(
     private val flickrAuth: FlickrAuthenticator,
     private val locationProvider: LocationProvider
@@ -23,6 +24,7 @@ class MainPresenter(
 
     private var view: MainView? = null
     private var gpsRequested = false
+    private var subscription: ReceiveChannel<Any>? = null
 
     fun onAttach(view: MainView) {
         super.onAttach()
@@ -30,8 +32,9 @@ class MainPresenter(
         if (locationProvider.isTrackingInProgress) {
             view.setStateRunning()
             launch {
-                locationProvider.repeatLast()
-                for (points in locationProvider.resultChannel) {
+                val channel = locationProvider.resultChannel.openSubscription()
+                subscription = channel
+                for (points in channel) {
                     showPointOnScreen(points)
                 }
             }
@@ -42,6 +45,7 @@ class MainPresenter(
 
     override fun onDetouch() {
         super.onDetouch()
+        subscription?.cancel()
         this.view = null
     }
 
@@ -72,7 +76,8 @@ class MainPresenter(
             }
 
             view?.setStateRunning()
-            val channel = locationProvider.startLocationTracking()
+            val channel = locationProvider.startLocationTracking().openSubscription()
+            subscription = channel
             for (points in channel) {
                 showPointOnScreen(points)
             }
