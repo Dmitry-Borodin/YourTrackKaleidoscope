@@ -29,13 +29,13 @@ import java.util.concurrent.ExecutionException
 @ExperimentalCoroutinesApi
 class LocationProvider(
     private val appContext: Context,
-    private val fusedLocationProviderClient: FusedLocationProviderClient, //supporting gms only since it's a pet project
+    private val fusedLocationProviderClient: FusedLocationProviderClient, //supporting gms only, since it's a pet project
     private val flickrUrlProvider: FlickrUrlProvider
 ) {
 
     var resultChannel: ConflatedBroadcastChannel<List<TrackingPoint>> = ConflatedBroadcastChannel()
     val currentLocationList: MutableList<TrackingPoint> = mutableListOf()
-    val isTrackingInProgress = resultChannel.valueOrNull != null
+    val isTrackingInProgress: Boolean get() = resultChannel.valueOrNull != null
 
     private val locationRequest: LocationRequest = createLocationRequest()
     private val locationUpdateCallback = object : LocationCallback() {
