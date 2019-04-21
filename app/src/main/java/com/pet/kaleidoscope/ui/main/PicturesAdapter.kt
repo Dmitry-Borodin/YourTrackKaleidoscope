@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.pet.kaleidoscope.R
 import com.pet.kaleidoscope.models.TrackingPoint
 import com.squareup.picasso.Picasso
+import com.viewbinder.bindView
 import timber.log.Timber
 import java.text.SimpleDateFormat
 import java.util.*
@@ -39,8 +40,8 @@ class PicturesAdapter : RecyclerView.Adapter<PictureViewHolder>() {
 }
 
 class PictureViewHolder(val view: View) : RecyclerView.ViewHolder(view) {
-    private val imageView = view.findViewById<ImageView>(R.id.item_image_view)
-    private val textView = view.findViewById<TextView>(R.id.item_imave_text)
+    private val imageView by bindView<ImageView>(R.id.item_image_view)
+    private val textView by bindView<TextView>(R.id.item_imave_text)
 
     fun bind(point: TrackingPoint) {
         textView.text = "time = ${point.timestamp.getTimeText()}; location is  ${point.location.latitude} , ${point.location.longitude}"

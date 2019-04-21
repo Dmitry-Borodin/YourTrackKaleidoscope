@@ -15,10 +15,7 @@ import com.pet.kaleidoscope.models.TrackingPoint
 import com.pet.kaleidoscope.models.toLatLong
 import com.pet.kaleidoscope.service.LocationService
 import kotlinx.coroutines.*
-import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.channels.ConflatedBroadcastChannel
-import kotlinx.coroutines.channels.SendChannel
-import timber.log.Timber
 import java.util.concurrent.ExecutionException
 
 /**
